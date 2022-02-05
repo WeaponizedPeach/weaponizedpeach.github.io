@@ -1,8 +1,9 @@
-baseurl: https://weaponizedpeach.github.io
+baseurl: https://weaponizedpeach.github.io/
 languageCode: en-us
 theme: Stack
 paginate: 5
-title: WeaponizedPeach 
+title: WeaponizedPeach
+publishDir: docs
 
 # Change it to your Disqus shortname before using
 #disqusShortname: hugo-theme-stack
