@@ -1,23 +1,21 @@
 <!doctype html><html lang=en-us>
 <head><meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Horizontall 
-Intro Welcome to my very first writeup! I am just starting out my infosec journey, and this box was my first &amp;lsquo;real&amp;rsquo; challenge. Although it is rated &amp;lsquo;Easy&amp;rsquo;, I had to apply all of my current knowledge to snag both flags. Let&amp;rsquo;s crack straight into it!
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Intro Welcome to my very first writeup! I am just starting out my infosec journey, and this box was my first &amp;lsquo;real&amp;rsquo; challenge. Although it is rated &amp;lsquo;Easy&amp;rsquo;, I had to apply all of my current knowledge to snag both flags. Let&amp;rsquo;s crack straight into it!
 Reconnaissance Machine tags:
  Linux CMS Exploit Outdated Software CVE Injection RCE Account Misconfiguration  The tags on the machine alone gives us a pretty good idea of what we&amp;rsquo;ll be up against."><title>HackTheBox: Horizontall</title>
 <link rel=canonical href=https://weaponizedpeach.github.io/p/hackthebox-horizontall/>
 <link rel=stylesheet href=/scss/style.min.5f343aefda6021d7c99a35d0d8a06abdad13d86982967b5b28f1008e404a346d.css><meta property="og:title" content="HackTheBox: Horizontall">
-<meta property="og:description" content="Horizontall 
-Intro Welcome to my very first writeup! I am just starting out my infosec journey, and this box was my first &amp;lsquo;real&amp;rsquo; challenge. Although it is rated &amp;lsquo;Easy&amp;rsquo;, I had to apply all of my current knowledge to snag both flags. Let&amp;rsquo;s crack straight into it!
+<meta property="og:description" content="Intro Welcome to my very first writeup! I am just starting out my infosec journey, and this box was my first &amp;lsquo;real&amp;rsquo; challenge. Although it is rated &amp;lsquo;Easy&amp;rsquo;, I had to apply all of my current knowledge to snag both flags. Let&amp;rsquo;s crack straight into it!
 Reconnaissance Machine tags:
  Linux CMS Exploit Outdated Software CVE Injection RCE Account Misconfiguration  The tags on the machine alone gives us a pretty good idea of what we&amp;rsquo;ll be up against.">
 <meta property="og:url" content="https://weaponizedpeach.github.io/p/hackthebox-horizontall/">
 <meta property="og:site_name" content="WeaponizedPeach >> Infosec">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:published_time" content="2022-02-05T20:55:12+02:00"><meta property="article:modified_time" content="2022-02-05T20:55:12+02:00">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:published_time" content="2022-02-05T20:55:12+02:00"><meta property="article:modified_time" content="2022-02-05T20:55:12+02:00"><meta property="og:image" content="https://weaponizedpeach.github.io/p/hackthebox-horizontall/cover.png">
 <meta name=twitter:title content="HackTheBox: Horizontall">
-<meta name=twitter:description content="Horizontall 
-Intro Welcome to my very first writeup! I am just starting out my infosec journey, and this box was my first &amp;lsquo;real&amp;rsquo; challenge. Although it is rated &amp;lsquo;Easy&amp;rsquo;, I had to apply all of my current knowledge to snag both flags. Let&amp;rsquo;s crack straight into it!
+<meta name=twitter:description content="Intro Welcome to my very first writeup! I am just starting out my infosec journey, and this box was my first &amp;lsquo;real&amp;rsquo; challenge. Although it is rated &amp;lsquo;Easy&amp;rsquo;, I had to apply all of my current knowledge to snag both flags. Let&amp;rsquo;s crack straight into it!
 Reconnaissance Machine tags:
- Linux CMS Exploit Outdated Software CVE Injection RCE Account Misconfiguration  The tags on the machine alone gives us a pretty good idea of what we&amp;rsquo;ll be up against.">
+ Linux CMS Exploit Outdated Software CVE Injection RCE Account Misconfiguration  The tags on the machine alone gives us a pretty good idea of what we&amp;rsquo;ll be up against."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://weaponizedpeach.github.io/p/hackthebox-horizontall/cover.png">
 <link rel="shortcut icon" href=favicon.ico>
 </head>
 <body class="article-page has-toc">
@@ -30,8 +28,13 @@ extended">
 </a>
 </div>
 <main class="main full-width">
-<article class=main-article>
+<article class="has-image main-article">
 <header class=article-header>
+<div class=article-image>
+<a href=/p/hackthebox-horizontall/>
+<img src=/p/hackthebox-horizontall/cover_hu288a9f216fac044683ba08b675347c45_114732_800x0_resize_box_3.png srcset="/p/hackthebox-horizontall/cover_hu288a9f216fac044683ba08b675347c45_114732_800x0_resize_box_3.png 800w, /p/hackthebox-horizontall/cover_hu288a9f216fac044683ba08b675347c45_114732_1600x0_resize_box_3.png 1600w" width=800 height=200 loading=lazy alt="Featured image of post HackTheBox: Horizontall">
+</a>
+</div>
 <div class=article-details>
 <header class=article-category>
 <a href=/categories/htb/>
@@ -75,12 +78,6 @@ CMS
 </div>
 </header>
 <section class=article-content>
-<p><figure class=gallery-image style=flex-grow:100;flex-basis:240px>
-<a href=/p/hackthebox-horizontall/horizontall.png data-size=300x300>
-<img src=/p/hackthebox-horizontall/horizontall.png width=300 height=300 srcset="/p/hackthebox-horizontall/horizontall_hucabaac7a6e40d6b25ebdf18177d21d86_71191_480x0_resize_box_3.png 480w, /p/hackthebox-horizontall/horizontall_hucabaac7a6e40d6b25ebdf18177d21d86_71191_1024x0_resize_box_3.png 1024w" loading=lazy alt=Horizontall>
-</a>
-<figcaption>Horizontall</figcaption>
-</figure></p>
 <h2 id=intro>Intro</h2>
 <p>Welcome to my very first writeup! I am just starting out my infosec journey, and this box was my first &lsquo;real&rsquo; challenge. Although it is rated &lsquo;Easy&rsquo;, I had to apply all of my current knowledge to snag both flags. Let&rsquo;s crack straight into it!</p>
 <h2 id=reconnaissance>Reconnaissance</h2>
