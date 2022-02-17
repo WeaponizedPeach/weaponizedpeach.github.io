@@ -2,7 +2,7 @@
 title: "HackTheBox: Horizontall"
 description: 
 date: 2022-02-05T20:55:12+02:00
-image: 
+image: cover.png
 math: 
 license: 
 hidden: false
@@ -18,8 +18,6 @@ categories:
     - RCE
     - CMS    
 ---
-![Horizontall](horizontall.png)
-
 ## Intro
 Welcome to my very first writeup! I am just starting out my infosec journey, and this box was my first 'real' challenge. Although it is rated 'Easy', I had to apply all of my current knowledge to snag both flags. Let's crack straight into it!
 
