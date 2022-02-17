@@ -7,7 +7,7 @@ math:
 license: 
 hidden: false
 comments: false
-draft: true
+draft: false
 categories:
     - THM
     - Writeup
