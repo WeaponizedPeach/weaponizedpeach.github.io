@@ -1,4 +1,103 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>WeaponizedPeach >> Infosec</title><link>https://weaponizedpeach.github.io/</link><description>Recent content on WeaponizedPeach >> Infosec</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 17 Feb 2022 15:50:05 +0200</lastBuildDate><atom:link href="https://weaponizedpeach.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>TryHackMe: Mr Robot CTF</title><link>https://weaponizedpeach.github.io/p/tryhackme-mr-robot-ctf/</link><pubDate>Thu, 17 Feb 2022 15:50:05 +0200</pubDate><guid>https://weaponizedpeach.github.io/p/tryhackme-mr-robot-ctf/</guid><description>&lt;img src="https://weaponizedpeach.github.io/p/tryhackme-mr-robot-ctf/cover.png" alt="Featured image of post TryHackMe: Mr Robot CTF" />&lt;h2 id="intro">Intro&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>WeaponizedPeach >> Infosec</title><link>https://weaponizedpeach.github.io/</link><description>Recent content on WeaponizedPeach >> Infosec</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 18 Feb 2022 20:38:56 +0200</lastBuildDate><atom:link href="https://weaponizedpeach.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>HackTheBox: Meow</title><link>https://weaponizedpeach.github.io/p/hackthebox-meow/</link><pubDate>Fri, 18 Feb 2022 20:38:56 +0200</pubDate><guid>https://weaponizedpeach.github.io/p/hackthebox-meow/</guid><description>&lt;img src="https://weaponizedpeach.github.io/p/hackthebox-meow/cover.png" alt="Featured image of post HackTheBox: Meow" />&lt;h2 id="intro">Intro&lt;/h2>
+&lt;p>This is a Very Easy machine from the Starting Point section on HackTheBox. It is meant to be an introductory box, to fully clear it, in addition to getting flags, we will also need to answer some questions.&lt;/p>
+&lt;h2 id="tasks">Tasks&lt;/h2>
+&lt;h3 id="task-1-what-does-the-acronym-vm-stand-for">Task 1: What does the acronym &lt;code>VM&lt;/code> stand for?&lt;/h3>
+&lt;pre tabindex="0">&lt;code>Virtual Machine
+&lt;/code>&lt;/pre>&lt;h3 id="task-2-what-tool-do-we-use-to-interact-with-the-operating-system-in-order-to-start-our-vpn-connection">Task 2: What tool do we use to interact with the operating system in order to start our VPN connection?&lt;/h3>
+&lt;pre tabindex="0">&lt;code>Terminal
+&lt;/code>&lt;/pre>&lt;h3 id="task-3-what-service-do-we-use-to-form-our-vpn-connection">Task 3: What service do we use to form our VPN connection?&lt;/h3>
+&lt;pre tabindex="0">&lt;code>OpenVPN
+&lt;/code>&lt;/pre>&lt;h3 id="task-4-what-is-the-abreviated-name-for-a-tunnel-interface-in-the-output-of-your-vpn-boot-up-sequence-output">Task 4: What is the abreviated name for a tunnel interface in the output of your VPN boot-up sequence output?&lt;/h3>
+&lt;p>For this, we should start our VPN connection: &lt;code>sudo openvpn our_openvpn_file_here.ovpn&lt;/code>.&lt;/p>
+&lt;p>We get a lot of output, but the relevant part for us is this part:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">Fri Feb &lt;span class="m">18&lt;/span> 21:38:17 &lt;span class="m">2022&lt;/span> TUN/TAP device tun0 opened
+Fri Feb &lt;span class="m">18&lt;/span> 21:38:17 &lt;span class="m">2022&lt;/span> TUN/TAP TX queue length &lt;span class="nb">set&lt;/span> to &lt;span class="m">100&lt;/span>
+Fri Feb &lt;span class="m">18&lt;/span> 21:38:17 &lt;span class="m">2022&lt;/span> /sbin/ip link &lt;span class="nb">set&lt;/span> dev tun0 up mtu &lt;span class="m">1500&lt;/span>
+Fri Feb &lt;span class="m">18&lt;/span> 21:38:17 &lt;span class="m">2022&lt;/span> /sbin/ip addr add dev tun0 10.10.15.16/23 broadcast 10.10.15.255
+Fri Feb &lt;span class="m">18&lt;/span> 21:38:17 &lt;span class="m">2022&lt;/span> /sbin/ip -6 addr add dead:beef:2::110e/64 dev tun0
+Fri Feb &lt;span class="m">18&lt;/span> 21:38:17 &lt;span class="m">2022&lt;/span> /sbin/ip route add 10.10.10.0/23 via 10.10.14.1
+Fri Feb &lt;span class="m">18&lt;/span> 21:38:17 &lt;span class="m">2022&lt;/span> /sbin/ip route add 10.129.0.0/16 via 10.10.14.1
+Fri Feb &lt;span class="m">18&lt;/span> 21:38:17 &lt;span class="m">2022&lt;/span> add_route_ipv6&lt;span class="o">(&lt;/span>dead:beef::/64 -&amp;gt; dead:beef:2::1 metric -1&lt;span class="o">)&lt;/span> dev tun0
+Fri Feb &lt;span class="m">18&lt;/span> 21:38:17 &lt;span class="m">2022&lt;/span> /sbin/ip -6 route add dead:beef::/64 dev tun0
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Here we can identify the tunnel interface/device as tun0. However, we need the &amp;lsquo;abreviated name for a tunnel interface&amp;rsquo;, not our specific one.&lt;/p>
+&lt;p>Thus, the answer is simply:&lt;/p>
+&lt;pre tabindex="0">&lt;code>tun
+&lt;/code>&lt;/pre>&lt;h3 id="task-5-what-tool-do-we-use-to-test-our-connection-to-the-target">Task 5: What tool do we use to test our connection to the target?&lt;/h3>
+&lt;pre tabindex="0">&lt;code>ping
+&lt;/code>&lt;/pre>&lt;p>We might aswell just go and ping the box itself:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">weaponizedpeach@Akatosh:~$ ping 10.129.255.195
+PING 10.129.255.195 &lt;span class="o">(&lt;/span>10.129.255.195&lt;span class="o">)&lt;/span> 56&lt;span class="o">(&lt;/span>84&lt;span class="o">)&lt;/span> bytes of data.
+&lt;span class="m">64&lt;/span> bytes from 10.129.255.195: &lt;span class="nv">icmp_seq&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">18&lt;/span> &lt;span class="nv">ttl&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">63&lt;/span> &lt;span class="nv">time&lt;/span>&lt;span class="o">=&lt;/span>48.8 ms
+&lt;span class="m">64&lt;/span> bytes from 10.129.255.195: &lt;span class="nv">icmp_seq&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">19&lt;/span> &lt;span class="nv">ttl&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">63&lt;/span> &lt;span class="nv">time&lt;/span>&lt;span class="o">=&lt;/span>48.6 ms
+&lt;span class="m">64&lt;/span> bytes from 10.129.255.195: &lt;span class="nv">icmp_seq&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">20&lt;/span> &lt;span class="nv">ttl&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">63&lt;/span> &lt;span class="nv">time&lt;/span>&lt;span class="o">=&lt;/span>48.6 ms
+&lt;span class="m">64&lt;/span> bytes from 10.129.255.195: &lt;span class="nv">icmp_seq&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">21&lt;/span> &lt;span class="nv">ttl&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">63&lt;/span> &lt;span class="nv">time&lt;/span>&lt;span class="o">=&lt;/span>49.1 ms
+&lt;span class="m">64&lt;/span> bytes from 10.129.255.195: &lt;span class="nv">icmp_seq&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">22&lt;/span> &lt;span class="nv">ttl&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">63&lt;/span> &lt;span class="nv">time&lt;/span>&lt;span class="o">=&lt;/span>48.6 ms
+&lt;span class="m">64&lt;/span> bytes from 10.129.255.195: &lt;span class="nv">icmp_seq&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">23&lt;/span> &lt;span class="nv">ttl&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">63&lt;/span> &lt;span class="nv">time&lt;/span>&lt;span class="o">=&lt;/span>48.8 ms
+^C
+--- 10.129.255.195 ping statistics ---
+&lt;span class="m">23&lt;/span> packets transmitted, &lt;span class="m">6&lt;/span> received, 73.913% packet loss, &lt;span class="nb">time&lt;/span> 22720ms
+rtt min/avg/max/mdev &lt;span class="o">=&lt;/span> 48.558/48.745/49.101/0.194 ms
+weaponizedpeach@Akatosh:~$
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="task-6-what-is-the-name-of-the-tool-we-use-to-scan-the-targets-ports">Task 6: What is the name of the tool we use to scan the target&amp;rsquo;s ports?&lt;/h3>
+&lt;pre tabindex="0">&lt;code>nmap
+&lt;/code>&lt;/pre>&lt;p>Let&amp;rsquo;s go and run a simple nmap scan:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">weaponizedpeach@Akatosh:~$ nmap 10.129.255.195
+Starting Nmap 7.80 &lt;span class="o">(&lt;/span> https://nmap.org &lt;span class="o">)&lt;/span> at 2022-02-18 21:47 EET
+Nmap scan report &lt;span class="k">for&lt;/span> 10.129.255.195
+Host is up &lt;span class="o">(&lt;/span>0.048s latency&lt;span class="o">)&lt;/span>.
+Not shown: &lt;span class="m">999&lt;/span> closed ports
+PORT STATE SERVICE
+23/tcp open telnet
+Nmap &lt;span class="k">done&lt;/span>: &lt;span class="m">1&lt;/span> IP address &lt;span class="o">(&lt;/span>&lt;span class="m">1&lt;/span> host up&lt;span class="o">)&lt;/span> scanned in 1.91 seconds
+weaponizedpeach@Akatosh:~$
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="task-7-what-service-do-we-identify-on-port-23tcp-during-our-scans">Task 7: What service do we identify on port 23/tcp during our scans?&lt;/h3>
+&lt;p>Nmap already identified the service for us:&lt;/p>
+&lt;pre tabindex="0">&lt;code>telnet
+&lt;/code>&lt;/pre>&lt;h3 id="task-8-what-username-ultimately-works-with-the-remote-management-login-prompt-for-the-target">Task 8: What username ultimately works with the remote management login prompt for the target?&lt;/h3>
+&lt;p>For this we will need to establish a telnet connection to the machine: &lt;code>telnet MACHINE_IP&lt;/code>&lt;/p>
+&lt;p>After a short period of time we are welcomed by a login screen:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">Trying 10.129.255.195...
+Connected to 10.129.255.195.
+Escape character is &lt;span class="s1">&amp;#39;^]&amp;#39;&lt;/span>.
+█ █ ▐▌ ▄█▄ █ ▄▄▄▄
+█▄▄█ ▀▀█ █▀▀ ▐▌▄▀ █ █▀█ █▀█ █▌▄█ ▄▀▀▄ ▀▄▀
+█ █ █▄█ █▄▄ ▐█▀▄ █ █ █ █▄▄ █▌▄█ ▀▄▄▀ █▀█
+Meow login:
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Since this is a introductory box, let&amp;rsquo;s just try &lt;code>root&lt;/code> as the login.&lt;/p>
+&lt;pre tabindex="0">&lt;code>Meow login: root
+Welcome to Ubuntu 20.04.2 LTS (GNU/Linux 5.4.0-77-generic x86_64)
+* Documentation: https://help.ubuntu.com
+* Management: https://landscape.canonical.com
+* Support: https://ubuntu.com/advantage
+System information as of Fri 18 Feb 2022 08:04:01 PM UTC
+...
+...
+...
+Last login: Fri Feb 18 20:01:31 UTC 2022 on pts/0
+root@Meow:~#
+&lt;/code>&lt;/pre>&lt;p>Success!&lt;/p>
+&lt;p>Thus, the answer to the question is:&lt;/p>
+&lt;pre tabindex="0">&lt;code>root
+&lt;/code>&lt;/pre>&lt;h3 id="submit-root-flag">Submit root flag&lt;/h3>
+&lt;p>Since we have root access, this should be easy.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">root@Meow:~# ls
+flag.txt snap
+root@Meow:~# cat flag.txt
+b40abdfe23665f766f9c61ecba8a4c19
+root@Meow:~#
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>And there&amp;rsquo;s our flag. The question wants the answer in the form &lt;code>HTB{_flag_}&lt;/code>&lt;/p>
+&lt;p>Let&amp;rsquo;s try: &lt;code>HTB{b40abdfe23665f766f9c61ecba8a4c19}&lt;/code>&lt;/p>
+&lt;p>&lt;figure
+>
+&lt;a href="https://weaponizedpeach.github.io/pwned.png" >
+&lt;img src="https://weaponizedpeach.github.io/pwned.png"
+loading="lazy"
+alt="Meow: Pwned">
+&lt;/a>
+&lt;figcaption>Meow: Pwned&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h2 id="outro">Outro&lt;/h2>
+&lt;p>Although I am used to harder boxes, I was still interested what the Starting Point machines had to offer. I am glad that newcomers to HTB (and likely CTFs in general) have a place to ease into machines like this, rather than just diving into the deep end. I plan to make a write-up for each of the Starting Point machines.&lt;/p></description></item><item><title>TryHackMe: Mr Robot CTF</title><link>https://weaponizedpeach.github.io/p/tryhackme-mr-robot-ctf/</link><pubDate>Thu, 17 Feb 2022 15:50:05 +0200</pubDate><guid>https://weaponizedpeach.github.io/p/tryhackme-mr-robot-ctf/</guid><description>&lt;img src="https://weaponizedpeach.github.io/p/tryhackme-mr-robot-ctf/cover.png" alt="Featured image of post TryHackMe: Mr Robot CTF" />&lt;h2 id="intro">Intro&lt;/h2>
 &lt;p>This time we&amp;rsquo;re breaking a machine from the &amp;ldquo;Mr Robot CTF&amp;rdquo; room &lt;a class="link" href="https://tryhackme.com/room/mrrobot" target="_blank" rel="noopener"
 >over on TryHackMe&lt;/a>.&lt;/p>
 &lt;h2 id="reconnaissance">Reconnaissance&lt;/h2>

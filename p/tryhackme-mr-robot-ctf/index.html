@@ -1,20 +1,14 @@
 <!doctype html><html lang=en-us>
 <head><meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Intro This time we&amp;rsquo;re breaking a machine from the &amp;ldquo;Mr Robot CTF&amp;rdquo; room over on TryHackMe.
-Reconnaissance The room itself on TryHackMe does not give much to go on, apart from the fact that the machine itself is inspired by the show Mr. Robot.
-Scanning &amp;amp; Discovery RustScan I decided to use I&amp;rsquo;ve heard a bunch about - RustScan. It pins down open ports much more efficiently, cutting down the amount of time needed for, say, a full port scan on a box."><title>TryHackMe: Mr Robot CTF</title>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Based on the Mr. Robot show, can you root this box?"><title>TryHackMe: Mr Robot CTF</title>
 <link rel=canonical href=https://weaponizedpeach.github.io/p/tryhackme-mr-robot-ctf/>
 <link rel=stylesheet href=/scss/style.min.5f343aefda6021d7c99a35d0d8a06abdad13d86982967b5b28f1008e404a346d.css><meta property="og:title" content="TryHackMe: Mr Robot CTF">
-<meta property="og:description" content="Intro This time we&amp;rsquo;re breaking a machine from the &amp;ldquo;Mr Robot CTF&amp;rdquo; room over on TryHackMe.
-Reconnaissance The room itself on TryHackMe does not give much to go on, apart from the fact that the machine itself is inspired by the show Mr. Robot.
-Scanning &amp;amp; Discovery RustScan I decided to use I&amp;rsquo;ve heard a bunch about - RustScan. It pins down open ports much more efficiently, cutting down the amount of time needed for, say, a full port scan on a box.">
+<meta property="og:description" content="Based on the Mr. Robot show, can you root this box?">
 <meta property="og:url" content="https://weaponizedpeach.github.io/p/tryhackme-mr-robot-ctf/">
 <meta property="og:site_name" content="WeaponizedPeach >> Infosec">
 <meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:published_time" content="2022-02-17T15:50:05+02:00"><meta property="article:modified_time" content="2022-02-17T15:50:05+02:00"><meta property="og:image" content="https://weaponizedpeach.github.io/p/tryhackme-mr-robot-ctf/cover.png">
 <meta name=twitter:title content="TryHackMe: Mr Robot CTF">
-<meta name=twitter:description content="Intro This time we&amp;rsquo;re breaking a machine from the &amp;ldquo;Mr Robot CTF&amp;rdquo; room over on TryHackMe.
-Reconnaissance The room itself on TryHackMe does not give much to go on, apart from the fact that the machine itself is inspired by the show Mr. Robot.
-Scanning &amp;amp; Discovery RustScan I decided to use I&amp;rsquo;ve heard a bunch about - RustScan. It pins down open ports much more efficiently, cutting down the amount of time needed for, say, a full port scan on a box."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:description content="Based on the Mr. Robot show, can you root this box?"><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://weaponizedpeach.github.io/p/tryhackme-mr-robot-ctf/cover.png">
 <link rel="shortcut icon" href=favicon.ico>
 </head>
@@ -32,7 +26,7 @@ extended">
 <header class=article-header>
 <div class=article-image>
 <a href=/p/tryhackme-mr-robot-ctf/>
-<img src=/p/tryhackme-mr-robot-ctf/cover_hu6683ae8eaa3abdaafe440783ba904183_54217_800x0_resize_box_3.png srcset="/p/tryhackme-mr-robot-ctf/cover_hu6683ae8eaa3abdaafe440783ba904183_54217_800x0_resize_box_3.png 800w, /p/tryhackme-mr-robot-ctf/cover_hu6683ae8eaa3abdaafe440783ba904183_54217_1600x0_resize_box_3.png 1600w" width=800 height=200 loading=lazy alt="Featured image of post TryHackMe: Mr Robot CTF">
+<img src=/p/tryhackme-mr-robot-ctf/cover_hu96b9a6c6202aff74c394a8aaf471d3ad_101175_800x0_resize_box_3.png srcset="/p/tryhackme-mr-robot-ctf/cover_hu96b9a6c6202aff74c394a8aaf471d3ad_101175_800x0_resize_box_3.png 800w, /p/tryhackme-mr-robot-ctf/cover_hu96b9a6c6202aff74c394a8aaf471d3ad_101175_1600x0_resize_box_3.png 1600w" width=800 height=200 loading=lazy alt="Featured image of post TryHackMe: Mr Robot CTF">
 </a>
 </div>
 <div class=article-details>
@@ -62,6 +56,9 @@ CMS
 <h2 class=article-title>
 <a href=/p/tryhackme-mr-robot-ctf/>TryHackMe: Mr Robot CTF</a>
 </h2>
+<h3 class=article-subtitle>
+Based on the Mr. Robot show, can you root this box?
+</h3>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
 <time class=article-time--published>Feb 17, 2022</time>
@@ -409,10 +406,20 @@ cat key-3-of-3.txt
 <article class=has-image>
 <a href=/p/hackthebox-horizontall/>
 <div class=article-image>
-<img src=/p/hackthebox-horizontall/cover.c2c3af3d966db6ce8372b824b5b0116f_hu288a9f216fac044683ba08b675347c45_114732_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post HackTheBox: Horizontall" data-hash="md5-wsOvPZZtts6DcrgktbARbw==">
+<img src=/p/hackthebox-horizontall/cover.9d0897807f09a768a7abcdf205d2ee4b_hu82ede2475d2d2a0855023287a2ed0fa7_240849_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post HackTheBox: Horizontall" data-hash="md5-nQiXgH8Jp2inq83yBdLuSw==">
 </div>
 <div class=article-details>
 <h2 class=article-title>HackTheBox: Horizontall</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/hackthebox-meow/>
+<div class=article-image>
+<img src=/p/hackthebox-meow/cover.98abc486a7cc85d3928e42ab7be02e7d_hu2c3d08ed4ea58fcb373b6868f0121962_232234_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post HackTheBox: Meow" data-hash="md5-mKvEhqfMhdOSjkKre+AufQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>HackTheBox: Meow</h2>
 </div>
 </a>
 </article>
