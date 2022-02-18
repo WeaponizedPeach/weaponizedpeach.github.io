@@ -1,6 +1,6 @@
 ---
 title: "TryHackMe: Mr Robot CTF"
-description: 
+description: "Based on the Mr. Robot show, can you root this box?"
 date: 2022-02-17T15:50:05+02:00
 image: cover.png
 math: 
