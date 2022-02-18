@@ -8,6 +8,7 @@ license:
 hidden: false
 comments: false
 draft: false
+categories:
 ---
 ## Intro
 
