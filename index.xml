@@ -1,4 +1,237 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>WeaponizedPeach >> Infosec</title><link>https://weaponizedpeach.github.io/</link><description>Recent content on WeaponizedPeach >> Infosec</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 18 Feb 2022 20:38:56 +0200</lastBuildDate><atom:link href="https://weaponizedpeach.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>HackTheBox: Meow</title><link>https://weaponizedpeach.github.io/p/hackthebox-meow/</link><pubDate>Fri, 18 Feb 2022 20:38:56 +0200</pubDate><guid>https://weaponizedpeach.github.io/p/hackthebox-meow/</guid><description>&lt;img src="https://weaponizedpeach.github.io/p/hackthebox-meow/cover.png" alt="Featured image of post HackTheBox: Meow" />&lt;h2 id="intro">Intro&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>WeaponizedPeach >> Infosec</title><link>https://weaponizedpeach.github.io/</link><description>Recent content on WeaponizedPeach >> Infosec</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 20 Feb 2022 00:11:44 +0200</lastBuildDate><atom:link href="https://weaponizedpeach.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>HackTheBox: Dancing</title><link>https://weaponizedpeach.github.io/p/hackthebox-dancing/</link><pubDate>Sun, 20 Feb 2022 00:11:44 +0200</pubDate><guid>https://weaponizedpeach.github.io/p/hackthebox-dancing/</guid><description>&lt;img src="https://weaponizedpeach.github.io/p/hackthebox-dancing/cover.png" alt="Featured image of post HackTheBox: Dancing" />&lt;h2 id="intro">Intro&lt;/h2>
+&lt;p>This is another Very Easy machine from the Starting Point section on HackTheBox. As is typical, besides just getting the root flag, we will need to answer some questions.&lt;/p>
+&lt;h2 id="tasks">Tasks&lt;/h2>
+&lt;h3 id="task-1-what-does-the-3-letter-acronym-smb-stand-for">Task 1: What does the 3-letter acronym SMB stand for?&lt;/h3>
+&lt;pre tabindex="0">&lt;code>Server Message Block
+&lt;/code>&lt;/pre>&lt;h3 id="task-2-what-port-does-smb-use-to-operate-at">Task 2: What port does SMB use to operate at?&lt;/h3>
+&lt;pre tabindex="0">&lt;code>445
+&lt;/code>&lt;/pre>&lt;h3 id="task-3-what-network-communication-model-does-smb-use-architecturally-speaking">Task 3: What network communication model does SMB use, architecturally speaking?&lt;/h3>
+&lt;p>Let&amp;rsquo;s Google a bit and find a diagram of the architecture used in SMB:
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 177;
+flex-basis: 426px"
+>
+&lt;a href="https://weaponizedpeach.github.io/p/hackthebox-dancing/smb_architecture.png" data-size="1920x1080">
+&lt;img src="https://weaponizedpeach.github.io/p/hackthebox-dancing/smb_architecture.png"
+width="1920"
+height="1080"
+srcset="https://weaponizedpeach.github.io/p/hackthebox-dancing/smb_architecture_hud950ceb0d5e36fb263047813196c746f_24302_480x0_resize_box_3.png 480w, https://weaponizedpeach.github.io/p/hackthebox-dancing/smb_architecture_hud950ceb0d5e36fb263047813196c746f_24302_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="SMB architecture (Source: ionos.co.uk)">
+&lt;/a>
+&lt;figcaption>SMB architecture (Source: ionos.co.uk)&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>Thus, the answer would be:&lt;/p>
+&lt;pre tabindex="0">&lt;code>Client-Server Model
+&lt;/code>&lt;/pre>&lt;h3 id="task-4-what-is-the-service-name-for-port-445-that-came-up-in-our-nmap-scan">Task 4: What is the service name for port 445 that came up in our nmap scan?&lt;/h3>
+&lt;p>For this question, let&amp;rsquo;s start an nmap scan and see what we have.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">weaponizedpeach@Akatosh:~$ nmap 10.129.1.12
+Starting Nmap 7.80 &lt;span class="o">(&lt;/span> https://nmap.org &lt;span class="o">)&lt;/span> at 2022-02-20 00:53 EET
+Nmap scan report &lt;span class="k">for&lt;/span> 10.129.1.12
+Host is up &lt;span class="o">(&lt;/span>0.044s latency&lt;span class="o">)&lt;/span>.
+Not shown: &lt;span class="m">997&lt;/span> closed ports
+PORT STATE SERVICE
+135/tcp open msrpc
+139/tcp open netbios-ssn
+445/tcp open microsoft-ds
+Nmap &lt;span class="k">done&lt;/span>: &lt;span class="m">1&lt;/span> IP address &lt;span class="o">(&lt;/span>&lt;span class="m">1&lt;/span> host up&lt;span class="o">)&lt;/span> scanned in 1.86 seconds
+weaponizedpeach@Akatosh:~$
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>According to the output results, the answer should be:&lt;/p>
+&lt;pre tabindex="0">&lt;code>microsoft-ds
+&lt;/code>&lt;/pre>&lt;h3 id="task-5-what-is-the-tool-we-use-to-connect-to-smb-shares-from-our-linux-distribution">Task 5: What is the tool we use to connect to SMB shares from our Linux distribution?&lt;/h3>
+&lt;p>While there are a few, we most commonly will use:&lt;/p>
+&lt;pre tabindex="0">&lt;code>smbclient
+&lt;/code>&lt;/pre>&lt;h3 id="task-6-what-is-the-flag-or-switch-we-can-use-with-the-smb-tool-to-list-the-contents-of-the-share">Task 6: What is the &lt;code>flag&lt;/code> or &lt;code>switch&lt;/code> we can use with the SMB tool to &lt;code>list&lt;/code> the contents of the share?&lt;/h3>
+&lt;p>Let&amp;rsquo;s pull up the help output of &lt;code>smbclient&lt;/code> to find out:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">weaponizedpeach@Akatosh:~$ smbclient -h
+Usage: smbclient &lt;span class="o">[&lt;/span>-?EgqBVNkPeC&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-?&lt;span class="p">|&lt;/span>--help&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>--usage&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-R&lt;span class="p">|&lt;/span>--name-resolve&lt;span class="o">=&lt;/span>NAME-RESOLVE-ORDER&lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span>-M&lt;span class="p">|&lt;/span>--message&lt;span class="o">=&lt;/span>HOST&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-I&lt;span class="p">|&lt;/span>--ip-address&lt;span class="o">=&lt;/span>IP&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-E&lt;span class="p">|&lt;/span>--stderr&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-L&lt;span class="p">|&lt;/span>--list&lt;span class="o">=&lt;/span>HOST&lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span>-m&lt;span class="p">|&lt;/span>--max-protocol&lt;span class="o">=&lt;/span>LEVEL&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-T&lt;span class="p">|&lt;/span>--tar&lt;span class="o">=&lt;/span>&amp;lt;c&lt;span class="p">|&lt;/span>x&amp;gt;IXFvgbNan&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-D&lt;span class="p">|&lt;/span>--directory&lt;span class="o">=&lt;/span>DIR&lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span>-c&lt;span class="p">|&lt;/span>--command&lt;span class="o">=&lt;/span>STRING&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-b&lt;span class="p">|&lt;/span>--send-buffer&lt;span class="o">=&lt;/span>BYTES&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-t&lt;span class="p">|&lt;/span>--timeout&lt;span class="o">=&lt;/span>SECONDS&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-p&lt;span class="p">|&lt;/span>--port&lt;span class="o">=&lt;/span>PORT&lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span>-g&lt;span class="p">|&lt;/span>--grepable&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-q&lt;span class="p">|&lt;/span>--quiet&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-B&lt;span class="p">|&lt;/span>--browse&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-d&lt;span class="p">|&lt;/span>--debuglevel&lt;span class="o">=&lt;/span>DEBUGLEVEL&lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span>-s&lt;span class="p">|&lt;/span>--configfile&lt;span class="o">=&lt;/span>CONFIGFILE&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-l&lt;span class="p">|&lt;/span>--log-basename&lt;span class="o">=&lt;/span>LOGFILEBASE&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-V&lt;span class="p">|&lt;/span>--version&lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span>--option&lt;span class="o">=&lt;/span>&lt;span class="nv">name&lt;/span>&lt;span class="o">=&lt;/span>value&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-O&lt;span class="p">|&lt;/span>--socket-options&lt;span class="o">=&lt;/span>SOCKETOPTIONS&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-n&lt;span class="p">|&lt;/span>--netbiosname&lt;span class="o">=&lt;/span>NETBIOSNAME&lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span>-W&lt;span class="p">|&lt;/span>--workgroup&lt;span class="o">=&lt;/span>WORKGROUP&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-i&lt;span class="p">|&lt;/span>--scope&lt;span class="o">=&lt;/span>SCOPE&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-U&lt;span class="p">|&lt;/span>--user&lt;span class="o">=&lt;/span>USERNAME&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-N&lt;span class="p">|&lt;/span>--no-pass&lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span>-k&lt;span class="p">|&lt;/span>--kerberos&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-A&lt;span class="p">|&lt;/span>--authentication-file&lt;span class="o">=&lt;/span>FILE&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-S&lt;span class="p">|&lt;/span>--signing&lt;span class="o">=&lt;/span>on&lt;span class="p">|&lt;/span>off&lt;span class="p">|&lt;/span>required&lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span>-P&lt;span class="p">|&lt;/span>--machine-pass&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-e&lt;span class="p">|&lt;/span>--encrypt&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-C&lt;span class="p">|&lt;/span>--use-ccache&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>--pw-nt-hash&lt;span class="o">]&lt;/span> service &amp;lt;password&amp;gt;
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>[-L|--list=HOST]&lt;/code> seems promising. Let&amp;rsquo;s try it!&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">weaponizedpeach@Akatosh:~$ smbclient -L 10.129.1.12
+Enter WORKGROUP&lt;span class="se">\w&lt;/span>eaponizedpeach&lt;span class="err">&amp;#39;&lt;/span>s password:
+Sharename Type Comment
+--------- ---- -------
+ADMIN$ Disk Remote Admin
+C$ Disk Default share
+IPC$ IPC Remote IPC
+WorkShares Disk
+SMB1 disabled -- no workgroup available
+weaponizedpeach@Akatosh:~$
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Seems like a success. The switch would be:&lt;/p>
+&lt;pre tabindex="0">&lt;code>-L
+&lt;/code>&lt;/pre>&lt;h3 id="task-7-what-is-the-name-of-the-share-we-are-able-to-access-in-the-end">Task 7: What is the name of the share we are able to access in the end?&lt;/h3>
+&lt;p>The SMB share &lt;code>WorkShares&lt;/code> does not exist by default, so it stands out. Let&amp;rsquo;s try it out first.&lt;/p>
+&lt;pre tabindex="0">&lt;code>weaponizedpeach@Akatosh:~$ smbclient \\\\10.129.1.12\\WorkShares
+Enter WORKGROUP\weaponizedpeach's password:
+Try &amp;quot;help&amp;quot; to get a list of possible commands.
+smb: \&amp;gt; ls
+. D 0 Mon Mar 29 11:22:01 2021
+.. D 0 Mon Mar 29 11:22:01 2021
+Amy.J D 0 Mon Mar 29 12:08:24 2021
+James.P D 0 Thu Jun 3 11:38:03 2021
+5114111 blocks of size 4096. 1753477 blocks available
+&lt;/code>&lt;/pre>&lt;p>Nice, we have a couple of directories to choose from.&lt;/p>
+&lt;h3 id="task-8-what-is-the-command-we-can-use-within-the-smb-shell-to-download-the-files-we-find">Task 8: What is the command we can use within the SMB shell to download the files we find?&lt;/h3>
+&lt;p>For this we can pull up the SMB &lt;code>help&lt;/code> menu and check what it has in store:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">Try &lt;span class="s2">&amp;#34;help&amp;#34;&lt;/span> to get a list of possible commands.
+smb: &lt;span class="se">\&amp;gt;&lt;/span> &lt;span class="nb">help&lt;/span>
+? allinfo altname archive backup
+blocksize cancel case_sensitive &lt;span class="nb">cd&lt;/span> chmod
+chown close del deltree dir
+du &lt;span class="nb">echo&lt;/span> &lt;span class="nb">exit&lt;/span> get getfacl
+geteas hardlink &lt;span class="nb">help&lt;/span> &lt;span class="nb">history&lt;/span> iosize
+lcd link lock lowercase ls
+l mask md mget mkdir
+more mput newer notify open
+posix posix_encrypt posix_open posix_mkdir posix_rmdir
+posix_unlink posix_whoami print prompt put
+&lt;span class="nb">pwd&lt;/span> q queue quit readlink
+rd recurse reget rename reput
+rm rmdir showacls setea setmode
+scopy stat symlink tar tarmode
+timeout translate unlock volume vuid
+wdel logon listconnect showconnect tcon
+tdis tid utimes logoff ..
+!
+smb: &lt;span class="se">\&amp;gt;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Let&amp;rsquo;s look which command stands out the most that we could use to download files:&lt;/p>
+&lt;pre tabindex="0">&lt;code>get
+&lt;/code>&lt;/pre>&lt;h3 id="submit-root-flag">Submit root flag&lt;/h3>
+&lt;p>Let&amp;rsquo;s continue from where we stopped at the end of Task 7 and check out the directory &lt;code>James. P&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">smb: &lt;span class="se">\&amp;gt;&lt;/span> &lt;span class="nb">cd&lt;/span> James.P
+smb: &lt;span class="se">\J&lt;/span>ames.P&lt;span class="se">\&amp;gt;&lt;/span> ls
+. D &lt;span class="m">0&lt;/span> Thu Jun &lt;span class="m">3&lt;/span> 11:38:03 &lt;span class="m">2021&lt;/span>
+.. D &lt;span class="m">0&lt;/span> Thu Jun &lt;span class="m">3&lt;/span> 11:38:03 &lt;span class="m">2021&lt;/span>
+flag.txt A &lt;span class="m">32&lt;/span> Mon Mar &lt;span class="m">29&lt;/span> 12:26:57 &lt;span class="m">2021&lt;/span>
+&lt;span class="m">5114111&lt;/span> blocks of size 4096. &lt;span class="m">1753477&lt;/span> blocks available
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Awesome, right there is our flag, let&amp;rsquo;s download it and finish this box :)&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">smb: &lt;span class="se">\J&lt;/span>ames.P&lt;span class="se">\&amp;gt;&lt;/span> get flag.txt
+getting file &lt;span class="se">\J&lt;/span>ames.P&lt;span class="se">\f&lt;/span>lag.txt of size &lt;span class="m">32&lt;/span> as flag.txt &lt;span class="o">(&lt;/span>0.2 KiloBytes/sec&lt;span class="o">)&lt;/span> &lt;span class="o">(&lt;/span>average 0.2 KiloBytes/sec&lt;span class="o">)&lt;/span>
+smb: &lt;span class="se">\J&lt;/span>ames.P&lt;span class="se">\&amp;gt;&lt;/span> &lt;span class="nb">exit&lt;/span>
+weaponizedpeach@Akatosh:~$ cat flag.txt
+5f61c10dffbc77a704d76016a22f1664
+weaponizedpeach@Akatosh:~$
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Per usual, we need to provide the flag in the format &lt;code>HTB{flag}&lt;/code>. And so, the flag is &lt;code>HTB{5f61c10dffbc77a704d76016a22f1664}&lt;/code>&lt;/p>
+&lt;h2 id="outro">Outro&lt;/h2>
+&lt;p>Another short and simple box from the Starting Point set of machines. I like that HackTheBox mixes in Windows machines as well, not just Unix/Linux ones. And since SMB is so prevalent amongst Windows boxes, I think it is useful to touch on it as well.&lt;/p></description></item><item><title>HackTheBox: Fawn</title><link>https://weaponizedpeach.github.io/p/hackthebox-fawn/</link><pubDate>Sat, 19 Feb 2022 22:02:29 +0200</pubDate><guid>https://weaponizedpeach.github.io/p/hackthebox-fawn/</guid><description>&lt;img src="https://weaponizedpeach.github.io/p/hackthebox-fawn/cover.png" alt="Featured image of post HackTheBox: Fawn" />&lt;h2 id="intro">Intro&lt;/h2>
+&lt;p>This is another Very Easy machine from the Starting Point section on HackTheBox. As is typical, besides just getting the root flag, we will need to answer some questions.&lt;/p>
+&lt;h2 id="tasks">Tasks&lt;/h2>
+&lt;h3 id="task-1-what-does-the-3-letter-acronym-ftp-stand-for">Task 1: What does the 3-letter acronym FTP stand for?&lt;/h3>
+&lt;pre tabindex="0">&lt;code>File Transfer Protocol
+&lt;/code>&lt;/pre>&lt;h3 id="task-2-what-communication-model-does-ftp-use-architecturally-speaking">Task 2: What communication model does FTP use, architecturally speaking?&lt;/h3>
+&lt;p>Here&amp;rsquo;s what the FTP architecture looks like (at a high level).&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 92;
+flex-basis: 221px"
+>
+&lt;a href="https://weaponizedpeach.github.io/p/hackthebox-fawn/ftp_architecture.png" data-size="340x369">
+&lt;img src="https://weaponizedpeach.github.io/p/hackthebox-fawn/ftp_architecture.png"
+width="340"
+height="369"
+srcset="https://weaponizedpeach.github.io/p/hackthebox-fawn/ftp_architecture_huaa86487fb995695f35e441cd78a36dc1_13964_480x0_resize_box_3.png 480w, https://weaponizedpeach.github.io/p/hackthebox-fawn/ftp_architecture_huaa86487fb995695f35e441cd78a36dc1_13964_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="FTP architecture (Source: educba.com)">
+&lt;/a>
+&lt;figcaption>FTP architecture (Source: educba.com)&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>Thus, our answer would be:&lt;/p>
+&lt;pre tabindex="0">&lt;code>Client-Server model
+&lt;/code>&lt;/pre>&lt;h3 id="task-3-what-is-the-name-of-one-popular-gui-ftp-program">Task 3: What is the name of one popular GUI FTP program?&lt;/h3>
+&lt;pre tabindex="0">&lt;code>Filezilla
+&lt;/code>&lt;/pre>&lt;h3 id="task-4-which-port-is-the-ftp-service-active-on-usually">Task 4: Which port is the FTP service active on usually?&lt;/h3>
+&lt;pre tabindex="0">&lt;code>21 TCP
+&lt;/code>&lt;/pre>&lt;h3 id="task-5-what-acronym-is-used-for-the-secure-version-of-ftp">Task 5: What acronym is used for the secure version of FTP?&lt;/h3>
+&lt;p>&lt;code>Secure File Transfer Protocol&lt;/code>&lt;/p>
+&lt;pre tabindex="0">&lt;code>SFTP
+&lt;/code>&lt;/pre>&lt;h3 id="task-6-what-is-the-command-we-can-use-to-test-our-connection-to-the-target">Task 6: What is the command we can use to test our connection to the target?&lt;/h3>
+&lt;pre tabindex="0">&lt;code>ping
+&lt;/code>&lt;/pre>&lt;p>Let&amp;rsquo;s test out the connection:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">weaponizedpeach@Akatosh:~$ ping 10.129.226.127
+PING 10.129.226.127 &lt;span class="o">(&lt;/span>10.129.226.127&lt;span class="o">)&lt;/span> 56&lt;span class="o">(&lt;/span>84&lt;span class="o">)&lt;/span> bytes of data.
+&lt;span class="m">64&lt;/span> bytes from 10.129.226.127: &lt;span class="nv">icmp_seq&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">1&lt;/span> &lt;span class="nv">ttl&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">63&lt;/span> &lt;span class="nv">time&lt;/span>&lt;span class="o">=&lt;/span>48.9 ms
+&lt;span class="m">64&lt;/span> bytes from 10.129.226.127: &lt;span class="nv">icmp_seq&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">2&lt;/span> &lt;span class="nv">ttl&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">63&lt;/span> &lt;span class="nv">time&lt;/span>&lt;span class="o">=&lt;/span>48.7 ms
+&lt;span class="m">64&lt;/span> bytes from 10.129.226.127: &lt;span class="nv">icmp_seq&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">3&lt;/span> &lt;span class="nv">ttl&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">63&lt;/span> &lt;span class="nv">time&lt;/span>&lt;span class="o">=&lt;/span>48.6 ms
+^C
+--- 10.129.226.127 ping statistics ---
+&lt;span class="m">3&lt;/span> packets transmitted, &lt;span class="m">3&lt;/span> received, 0% packet loss, &lt;span class="nb">time&lt;/span> 2004ms
+rtt min/avg/max/mdev &lt;span class="o">=&lt;/span> 48.627/48.742/48.871/0.100 ms
+weaponizedpeach@Akatosh:~$
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="task-7-from-your-scans-what-version-is-ftp-running-on-the-target">Task 7: From your scans, what version is FTP running on the target?&lt;/h3>
+&lt;p>Let&amp;rsquo;s run an nmap scan:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">weaponizedpeach@Akatosh:~$ nmap 10.129.226.127
+Starting Nmap 7.80 &lt;span class="o">(&lt;/span> https://nmap.org &lt;span class="o">)&lt;/span> at 2022-02-19 22:27 EET
+Nmap scan report &lt;span class="k">for&lt;/span> 10.129.226.127
+Host is up &lt;span class="o">(&lt;/span>0.048s latency&lt;span class="o">)&lt;/span>.
+Not shown: &lt;span class="m">999&lt;/span> closed ports
+PORT STATE SERVICE
+21/tcp open ftp
+Nmap &lt;span class="k">done&lt;/span>: &lt;span class="m">1&lt;/span> IP address &lt;span class="o">(&lt;/span>&lt;span class="m">1&lt;/span> host up&lt;span class="o">)&lt;/span> scanned in 1.91 seconds
+weaponizedpeach@Akatosh:~$
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Here we can see an open FTP port on 21 TCP. However, this is not enough, we also need to get the specific version of FTP used. Let&amp;rsquo;s run nmap again, this time with service and version detection (&lt;code>-sV&lt;/code>) enabled.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">weaponizedpeach@Akatosh:~$ nmap -sV 10.129.226.127
+Starting Nmap 7.80 &lt;span class="o">(&lt;/span> https://nmap.org &lt;span class="o">)&lt;/span> at 2022-02-19 22:31 EET
+Nmap scan report &lt;span class="k">for&lt;/span> 10.129.226.127
+Host is up &lt;span class="o">(&lt;/span>0.049s latency&lt;span class="o">)&lt;/span>.
+Not shown: &lt;span class="m">999&lt;/span> closed ports
+PORT STATE SERVICE VERSION
+21/tcp open ftp vsftpd 3.0.3
+Service Info: OS: Unix
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap &lt;span class="k">done&lt;/span>: &lt;span class="m">1&lt;/span> IP address &lt;span class="o">(&lt;/span>&lt;span class="m">1&lt;/span> host up&lt;span class="o">)&lt;/span> scanned in 2.55 seconds
+weaponizedpeach@Akatosh:~$
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>This time we got some additional information. Thus, the answer is:&lt;/p>
+&lt;pre tabindex="0">&lt;code>vsftpd 3.0.3
+&lt;/code>&lt;/pre>&lt;h3 id="task-8-from-your-scans-what-os-type-is-running-on-the-target">Task 8: From your scans, what OS type is running on the target?&lt;/h3>
+&lt;p>We can use the nmap output from the previous task to identify the answer to this one as well.&lt;/p>
+&lt;pre tabindex="0">&lt;code>Unix
+&lt;/code>&lt;/pre>&lt;h3 id="submit-root-flag">Submit root flag&lt;/h3>
+&lt;p>Given the fact that the box is oriented towards FTP and there is only a single open port - an FTP service, let&amp;rsquo;s try to connect to it and see what happens.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">weaponizedpeach@Akatosh:~$ ftp 10.129.226.127
+Connected to 10.129.226.127.
+&lt;span class="m">220&lt;/span> &lt;span class="o">(&lt;/span>vsFTPd 3.0.3&lt;span class="o">)&lt;/span>
+Name &lt;span class="o">(&lt;/span>10.129.226.127:weaponizedpeach&lt;span class="o">)&lt;/span>:
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>We are being asked for a username. Some FTP servers allow anonymous access, maybe this is one of them, let&amp;rsquo;s give it a try, if so, the password is likely blank:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">Name &lt;span class="o">(&lt;/span>10.129.226.127:weaponizedpeach&lt;span class="o">)&lt;/span>: anonymous
+&lt;span class="m">331&lt;/span> Please specify the password.
+Password:
+&lt;span class="m">230&lt;/span> Login successful.
+Remote system &lt;span class="nb">type&lt;/span> is UNIX.
+Using binary mode to transfer files.
+ftp&amp;gt;
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>We&amp;rsquo;re in. Let&amp;rsquo;s snoop around and try to snag the flag.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">ftp&amp;gt; ls
+&lt;span class="m">200&lt;/span> PORT &lt;span class="nb">command&lt;/span> successful. Consider using PASV.
+&lt;span class="m">150&lt;/span> Here comes the directory listing.
+-rw-r--r-- &lt;span class="m">1&lt;/span> &lt;span class="m">0&lt;/span> &lt;span class="m">0&lt;/span> &lt;span class="m">32&lt;/span> Jun &lt;span class="m">04&lt;/span> &lt;span class="m">2021&lt;/span> flag.txt
+&lt;span class="m">226&lt;/span> Directory send OK.
+ftp&amp;gt; get flag.txt
+local: flag.txt remote: flag.txt
+&lt;span class="m">200&lt;/span> PORT &lt;span class="nb">command&lt;/span> successful. Consider using PASV.
+&lt;span class="m">150&lt;/span> Opening BINARY mode data connection &lt;span class="k">for&lt;/span> flag.txt &lt;span class="o">(&lt;/span>&lt;span class="m">32&lt;/span> bytes&lt;span class="o">)&lt;/span>.
+&lt;span class="m">226&lt;/span> Transfer complete.
+&lt;span class="m">32&lt;/span> bytes received in 0.00 secs &lt;span class="o">(&lt;/span>34.7996 kB/s&lt;span class="o">)&lt;/span>
+ftp&amp;gt; &lt;span class="nb">exit&lt;/span>
+&lt;span class="m">221&lt;/span> Goodbye.
+weaponizedpeach@Akatosh:~$ ls
+OpenVPN flag.txt
+weaponizedpeach@Akatosh:~$ cat flag.txt
+035db21c881520061c53e0536e44f815
+weaponizedpeach@Akatosh:~$
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>As usual, we need to provide the flag itself in the format of HTB{_flag_}:&lt;/p>
+&lt;pre tabindex="0">&lt;code>HTB{035db21c881520061c53e0536e44f815}
+&lt;/code>&lt;/pre>&lt;p>And that&amp;rsquo;s it for Fawn!&lt;/p></description></item><item><title>HackTheBox: Meow</title><link>https://weaponizedpeach.github.io/p/hackthebox-meow/</link><pubDate>Fri, 18 Feb 2022 20:38:56 +0200</pubDate><guid>https://weaponizedpeach.github.io/p/hackthebox-meow/</guid><description>&lt;img src="https://weaponizedpeach.github.io/p/hackthebox-meow/cover.png" alt="Featured image of post HackTheBox: Meow" />&lt;h2 id="intro">Intro&lt;/h2>
 &lt;p>This is a Very Easy machine from the Starting Point section on HackTheBox. It is meant to be an introductory box, to fully clear it, in addition to getting flags, we will also need to answer some questions.&lt;/p>
 &lt;h2 id="tasks">Tasks&lt;/h2>
 &lt;h3 id="task-1-what-does-the-acronym-vm-stand-for">Task 1: What does the acronym &lt;code>VM&lt;/code> stand for?&lt;/h3>
