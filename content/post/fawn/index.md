@@ -17,7 +17,7 @@ categories:
     - Account Misconfiguration
 ---
 ## Intro
-This is another Very Easy machine from the Starting Point section on HackThebox. As is typical, besides just getting the root flag, we will need to answer some questions.
+This is another Very Easy machine from the Starting Point section on HackTheBox. As is typical, besides just getting the root flag, we will need to answer some questions.
 
 ## Tasks
 
